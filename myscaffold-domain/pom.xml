@@ -56,11 +56,11 @@
         <!-- == End TERASOLUNA == -->
 
         <!-- == Begin Database == -->
-<!--         <dependency> -->
-<!--             <groupId>org.postgresql</groupId> -->
-<!--             <artifactId>postgresql</artifactId> -->
-<!--             <scope>test</scope> -->
-<!--         </dependency> -->
+         <dependency>
+             <groupId>org.postgresql</groupId>
+             <artifactId>postgresql</artifactId>
+             <scope>test</scope>
+         </dependency>
 <!--         <dependency> -->
 <!--             <groupId>com.oracle.jdbc</groupId> -->
 <!--             <artifactId>ojdbc8</artifactId> -->

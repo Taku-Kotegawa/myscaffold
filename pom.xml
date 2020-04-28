@@ -127,11 +127,11 @@
             </dependency>
 
             <!-- == Begin Database == -->
-<!--             <dependency> -->
-<!--                 <groupId>org.postgresql</groupId> -->
-<!--                 <artifactId>postgresql</artifactId> -->
-<!--                 <version>${postgresql.version}</version> -->
-<!--             </dependency> -->
+             <dependency>
+                 <groupId>org.postgresql</groupId>
+                 <artifactId>postgresql</artifactId>
+                 <version>${postgresql.version}</version>
+             </dependency>
 <!--             <dependency> -->
 <!--                 <groupId>com.oracle.jdbc</groupId> -->
 <!--                 <artifactId>ojdbc8</artifactId> -->
