@@ -28,7 +28,9 @@ button.close, button.mailbox-attachment-close {
   padding: 0;
   background-color: transparent;
   border: 0;
-  appearance: none;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
 }
 
 a.close.disabled, a.disabled.mailbox-attachment-close {
@@ -211,12 +213,16 @@ a.close.disabled, a.disabled.mailbox-attachment-close {
 
 .login-page,
 .register-page {
-  align-items: center;
+  -ms-flex-align: center;
+      align-items: center;
   background: #e9ecef;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -ms-flex-direction: column;
+      flex-direction: column;
   height: 100vh;
-  justify-content: center;
+  -ms-flex-pack: center;
+      justify-content: center;
 }
 
 .login-box,
@@ -393,7 +399,9 @@ a.close.disabled, a.disabled.mailbox-attachment-close {
 }
 
 .product-image-thumbs {
-  align-items: stretch;
+  -ms-flex-align: stretch;
+      align-items: stretch;
+  display: -ms-flexbox;
   display: flex;
   margin-top: 2rem;
 }
@@ -403,6 +411,7 @@ a.close.disabled, a.disabled.mailbox-attachment-close {
   border-radius: 0.25rem;
   background-color: #ffffff;
   border: 1px solid #dee2e6;
+  display: -ms-flexbox;
   display: flex;
   margin-right: 1rem;
   max-width: 7rem;
@@ -412,7 +421,9 @@ a.close.disabled, a.disabled.mailbox-attachment-close {
 .product-image-thumb img {
   max-width: 100%;
   height: auto;
-  align-self: center;
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
 }
 
 .product-image-thumb:hover {
@@ -441,5 +452,4 @@ a.close.disabled, a.disabled.mailbox-attachment-close {
 .projects .project-state {
   text-align: center;
 }
-
-/*# sourceMappingURL=adminlte.pages.css.map */
+/*# sourceMappingURL=AdminLTE-pages.css.map */
