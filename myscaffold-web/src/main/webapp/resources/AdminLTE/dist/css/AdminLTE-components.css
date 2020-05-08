@@ -29,7 +29,7 @@
 }
 
 .form-control-feedback.fa, .form-control-feedback.fas, .form-control-feedback.far, .form-control-feedback.fab, .form-control-feedback.glyphicon, .form-control-feedback.ion {
-  line-height: calc(2.25rem + 2px);
+  line-height: calc(1.96875rem + 2px);
 }
 
 .input-lg + .form-control-feedback.fa, .input-lg + .form-control-feedback.fas, .input-lg + .form-control-feedback.far, .input-lg + .form-control-feedback.fab, .input-lg + .form-control-feedback.glyphicon, .input-lg + .form-control-feedback.ion,
@@ -39,11 +39,11 @@
 .input-group-lg + .form-control-feedback.fab,
 .input-group-lg + .form-control-feedback.glyphicon,
 .input-group-lg + .form-control-feedback.ion {
-  line-height: calc(2.875rem + 2px);
+  line-height: calc(2.52344rem + 2px);
 }
 
 .form-group-lg .form-control + .form-control-feedback.fa, .form-group-lg .form-control + .form-control-feedback.fas, .form-group-lg .form-control + .form-control-feedback.far, .form-group-lg .form-control + .form-control-feedback.fab, .form-group-lg .form-control + .form-control-feedback.glyphicon, .form-group-lg .form-control + .form-control-feedback.ion {
-  line-height: calc(2.875rem + 2px);
+  line-height: calc(2.52344rem + 2px);
 }
 
 .input-sm + .form-control-feedback.fa, .input-sm + .form-control-feedback.fas, .input-sm + .form-control-feedback.far, .input-sm + .form-control-feedback.fab, .input-sm + .form-control-feedback.glyphicon, .input-sm + .form-control-feedback.ion,
@@ -53,11 +53,11 @@
 .input-group-sm + .form-control-feedback.fab,
 .input-group-sm + .form-control-feedback.glyphicon,
 .input-group-sm + .form-control-feedback.ion {
-  line-height: calc(1.8125rem + 2px);
+  line-height: calc(1.56641rem + 2px);
 }
 
 .form-group-sm .form-control + .form-control-feedback.fa, .form-group-sm .form-control + .form-control-feedback.fas, .form-group-sm .form-control + .form-control-feedback.far, .form-group-sm .form-control + .form-control-feedback.fab, .form-group-sm .form-control + .form-control-feedback.glyphicon, .form-group-sm .form-control + .form-control-feedback.ion {
-  line-height: calc(1.8125rem + 2px);
+  line-height: calc(1.56641rem + 2px);
 }
 
 label:not(.form-check-label):not(.custom-file-label) {
@@ -73,8 +73,8 @@ label:not(.form-check-label):not(.custom-file-label) {
 }
 
 .warning-tooltip {
-  border-radius: 0.25rem;
-  font-size: 0.875rem;
+  border-radius: 0rem;
+  font-size: 0.71094rem;
   background-color: rgba(255, 193, 7, 0.9);
   color: #1F2D3D;
   display: none;
@@ -102,7 +102,7 @@ label:not(.form-check-label):not(.custom-file-label) {
 }
 
 textarea.form-control.is-warning {
-  padding-right: 2.25rem;
+  padding-right: 1.96875rem;
   background-position: top calc(0.375em + 0.1875rem) right calc(0.375em + 0.1875rem);
 }
 
@@ -4084,8 +4084,8 @@ html.maximized-card {
   border-bottom: 1px solid rgba(0, 0, 0, 0.125);
   padding: 0.75rem 1.25rem;
   position: relative;
-  border-top-left-radius: 0.25rem;
-  border-top-right-radius: 0.25rem;
+  border-top-left-radius: 0rem;
+  border-top-right-radius: 0rem;
 }
 
 .collapsed-card .card-header {
@@ -4122,7 +4122,7 @@ html.maximized-card {
 .btn-tool {
   background: transparent;
   color: #adb5bd;
-  font-size: 0.875rem;
+  font-size: 0.71094rem;
   margin: -0.75rem 0;
   padding: .25rem .5rem;
 }
@@ -4857,7 +4857,7 @@ html.maximized-card {
 }
 
 .text-sm .btn {
-  font-size: 0.875rem !important;
+  font-size: 0.71094rem !important;
 }
 
 .btn-default {
@@ -4915,13 +4915,13 @@ html.maximized-card {
 
 .btn-xs {
   padding: 0.125rem 0.25rem;
-  font-size: 0.75rem;
+  font-size: 0.60938rem;
   line-height: 1.5;
   border-radius: 0.15rem;
 }
 
 .callout {
-  border-radius: 0.25rem;
+  border-radius: 0rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   background-color: #ffffff;
   border-left: 5px solid #e9ecef;

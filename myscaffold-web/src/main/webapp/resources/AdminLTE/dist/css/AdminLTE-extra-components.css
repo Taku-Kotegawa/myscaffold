@@ -6,7 +6,7 @@
  *   License: Open source - MIT <http://opensource.org/licenses/MIT>
  */
 .small-box {
-  border-radius: 0.25rem;
+  border-radius: 0rem;
   box-shadow: 0 0 1px rgba(0, 0, 0, 0.125), 0 1px 3px rgba(0, 0, 0, 0.2);
   display: block;
   margin-bottom: 20px;
@@ -127,7 +127,7 @@
 
 .info-box {
   box-shadow: 0 0 1px rgba(0, 0, 0, 0.125), 0 1px 3px rgba(0, 0, 0, 0.2);
-  border-radius: 0.25rem;
+  border-radius: 0rem;
   background: #ffffff;
   display: -ms-flexbox;
   display: flex;
@@ -148,7 +148,7 @@
 }
 
 .info-box .info-box-icon {
-  border-radius: 0.25rem;
+  border-radius: 0rem;
   -ms-flex-align: center;
       align-items: center;
   display: -ms-flexbox;
@@ -321,7 +321,7 @@
 }
 
 .timeline::before {
-  border-radius: 0.25rem;
+  border-radius: 0rem;
   background: #dee2e6;
   bottom: 0;
   content: '';
@@ -345,7 +345,7 @@
 
 .timeline > div > .timeline-item {
   box-shadow: 0 0 1px rgba(0, 0, 0, 0.125), 0 1px 3px rgba(0, 0, 0, 0.2);
-  border-radius: 0.25rem;
+  border-radius: 0rem;
   background: #ffffff;
   color: #495057;
   margin-left: 60px;
@@ -435,7 +435,7 @@
 }
 
 .products-list > .item {
-  border-radius: 0.25rem;
+  border-radius: 0rem;
   background: #ffffff;
   padding: 10px 0;
 }
@@ -530,7 +530,7 @@
 }
 
 .direct-chat-text {
-  border-radius: 0.3rem;
+  border-radius: 0rem;
   background: #d2d6de;
   border: 1px solid #d2d6de;
   color: #444;
@@ -586,7 +586,7 @@
 
 .direct-chat-infos {
   display: block;
-  font-size: 0.875rem;
+  font-size: 0.71094rem;
   margin-bottom: 2px;
 }
 
@@ -674,7 +674,7 @@
 }
 
 .contacts-list-status {
-  font-size: 0.875rem;
+  font-size: 0.71094rem;
 }
 
 .contacts-list-date {
@@ -986,7 +986,7 @@
 
 .users-list-name {
   color: #495057;
-  font-size: 0.875rem;
+  font-size: 0.71094rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -1003,8 +1003,8 @@
 }
 
 .widget-user .widget-user-header {
-  border-top-left-radius: 0.25rem;
-  border-top-right-radius: 0.25rem;
+  border-top-left-radius: 0rem;
+  border-top-right-radius: 0rem;
   height: 135px;
   padding: 1rem;
   text-align: center;
@@ -1040,8 +1040,8 @@
 }
 
 .widget-user-2 .widget-user-header {
-  border-top-left-radius: 0.25rem;
-  border-top-right-radius: 0.25rem;
+  border-top-left-radius: 0rem;
+  border-top-right-radius: 0rem;
   padding: 1rem;
 }
 
