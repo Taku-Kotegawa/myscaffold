@@ -1,16 +1,5 @@
-$grid-columns: 36;
-$grid-gutter-width: 10px;
-$font-size-base: 0.812rem;
-$font-family-sans-serif: meiryo,
--apple-system,
-BlinkMacSystemFont,
-"Segoe UI",
-Roboto,
-"Helvetica Neue",
-Arial,
-"Noto Sans",
-sans-serif,
-"Apple Color Emoji",
-"Segoe UI Emoji",
-"Segoe UI Symbol",
-"Noto Color Emoji";
+$font-size-base: .8125rem;
+
+$border-radius: 0rem !default;
+$border-radius-lg: 0rem !default;
+$border-radius-sm: 0rem !default;
