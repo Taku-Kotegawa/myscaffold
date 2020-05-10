@@ -142,8 +142,8 @@
     </error-page>
 
     <session-config>
-        <!-- 30min -->
-        <session-timeout>5</session-timeout>
+        <!-- 5000min -->
+        <session-timeout>5000</session-timeout>
         <cookie-config>
             <http-only>true</http-only>
             <!-- <secure>true</secure> -->

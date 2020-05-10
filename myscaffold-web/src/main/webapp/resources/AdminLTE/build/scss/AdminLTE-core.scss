@@ -7,7 +7,7 @@
  */
 
 // Add Custom Variables
-@import 'custom-variables';
+@import 'custom/variables';
 
 // Bootstrap
 // ---------------------------------------------------
@@ -22,3 +22,8 @@
 
 @import 'parts/core';
 @import 'parts/miscellaneous';
+
+
+// カスタマイズ
+// ---------------------------------------------------
+@import 'custom/extra';

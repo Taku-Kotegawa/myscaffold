@@ -1,19 +1,38 @@
-
-    <div id="wrapper">
-        <h1>Reissue password</h1>
-        <t:messagesPanel />
-        <form:form
-            action="${f:h(pageContext.request.contextPath)}/reissue/create"
-            method="POST" modelAttribute="createReissueInfoForm">
-            <table>
-                <tr>
-                    <th><form:label path="username" cssErrorClass="error-label">Username</form:label>
-                    </th>
-                    <td><form:input path="username" cssErrorClass="error-input" /></td>
-                    <td><form:errors path="username" cssClass="error-messages" /></td>
-                </tr>
-            </table>
-
-            <input id="submit" type="submit" value="Reissue password" />
-        </form:form>
+<section class="content-header">
+  <div class="container">
+    <div class="row mb-2">
+      <div class="col-18">
+        <!-- ページタイトルを記入 -->
+        <h3>パスワードの再発行</h3>
+      </div>
+      <div class="col-18">
+        <!-- ページタイトル右の余白 -->
+      </div>
     </div>
+  </div>
+</section>
+<section class="content">
+  <div class="container">
+    <t:messagesPanel />
+    <!-- ここより下にメインコンテンツを記入 -->
+
+    <form:form action="${f:h(pageContext.request.contextPath)}/reissue/create" method="POST"
+      modelAttribute="createReissueInfoForm" autocomplete="off" >
+
+      <div class="form-group row">
+        <form:label path="username" cssClass="col-4 col-form-label">
+          ユーザ名 *
+        </form:label>
+        <div class="col-10">
+          <form:input path="username" cssClass="form-control" cssErrorClass="form-control is-invalid" />
+          <form:errors path="username" cssClass="invalid-feedback" />
+        </div>
+      </div>
+      <br>
+      <input id="submit" type="submit" value="再発行" class="btn-button" />
+    </form:form>
+
+    <!-- ここより上にメインコンテンツを記入 -->
+  </div>
+</section>
+

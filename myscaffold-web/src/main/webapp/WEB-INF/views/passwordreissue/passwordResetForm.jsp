@@ -1,41 +1,70 @@
-    <div id="wrapper">
-        <h1>Reset Password</h1>
-        <t:messagesPanel />
-        <form:form
-            action="${f:h(pageContext.request.contextPath)}/reissue/resetpassword"
-            method="POST" modelAttribute="passwordResetForm">
-            <table>
-                <tr>
-                    <th><form:label path="username">Username</form:label></th>
-                    <td>${f:h(passwordResetForm.username)} <form:hidden
-                            path="username" value="${f:h(passwordResetorm.username)}" />
-                    </td>
-                    <td></td>
-                </tr>
-                <form:hidden path="token" value="${f:h(passwordResetForm.token)}" />
-                <tr>
-                    <th><form:label path="secret" cssErrorClass="error-label">Secret</form:label>
-                    </th>
-                    <td><form:password path="secret" cssErrorClass="error-input" /></td>
-                    <td><form:errors path="secret" cssClass="error-messages" /></td>
-                </tr>
-                <tr>
-                    <th><form:label path="newPassword" cssErrorClass="error-label">New password</form:label>
-                    </th>
-                    <td><form:password path="newPassword"
-                            cssErrorClass="error-input" /></td>
-                    <td><form:errors path="newPassword" cssClass="error-messages" /></td>
-                </tr>
-                <tr>
-                    <th><form:label path="confirmNewPassword"
-                            cssErrorClass="error-label">New password(Confirm)</form:label></th>
-                    <td><form:password path="confirmNewPassword"
-                            cssErrorClass="error-input" /></td>
-                    <td><form:errors path="confirmNewPassword"
-                            cssClass="error-messages" /></td>
-                </tr>
-            </table>
-
-            <input id="submit" type="submit" value="Reset password" />
-        </form:form>
+<section class="content-header">
+  <div class="container">
+    <div class="row mb-2">
+      <div class="col-18">
+        <!-- ページタイトルを記入 -->
+        <h3>パスワードリセット</h3>
+      </div>
+      <div class="col-18">
+        <!-- ページタイトル右の余白 -->
+      </div>
     </div>
+  </div>
+</section>
+<section class="content">
+  <div class="container">
+    <t:messagesPanel />
+    <!-- ここより下にメインコンテンツを記入 -->
+
+    <form:form action="${f:h(pageContext.request.contextPath)}/reissue/resetpassword" method="POST"
+      modelAttribute="passwordResetForm" autocomplete="off">
+
+      <div class="form-group row">
+        <form:label path="username" cssClass="col-4 col-form-label">
+          ユーザ名 *
+        </form:label>
+        <div class="col-10">
+          ${f:h(passwordResetForm.username)}
+          <form:hidden path="username" value="${f:h(passwordResetorm.username)}" />
+        </div>
+      </div>
+
+      <form:hidden path="token" value="${f:h(passwordResetForm.token)}" />
+
+      <div class="form-group row">
+        <form:label path="secret" cssClass="col-4 col-form-label">
+          暗証番号 *
+        </form:label>
+        <div class="col-10">
+          <form:password path="secret" cssClass="form-control" cssErrorClass="form-control is-invalid" />
+          <form:errors path="secret" cssClass="invalid-feedback" />
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <form:label path="newPassword" cssClass="col-4 col-form-label">
+          新しいパスワード *
+        </form:label>
+        <div class="col-10">
+          <form:password path="newPassword" cssClass="form-control" cssErrorClass="form-control is-invalid" />
+          <form:errors path="newPassword" cssClass="invalid-feedback" />
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <form:label path="confirmNewPassword" cssClass="col-4 col-form-label">
+          新しいパスワード(確認) *
+        </form:label>
+        <div class="col-10">
+          <form:password path="confirmNewPassword" cssClass="form-control" cssErrorClass="form-control is-invalid" />
+          <form:errors path="confirmNewPassword" cssClass="invalid-feedback" />
+        </div>
+      </div>
+      <br>
+
+      <input id="submit" type="submit" value="Reset password" class="btn-button" />
+    </form:form>
+
+    <!-- ここより上にメインコンテンツを記入 -->
+  </div>
+</section>

@@ -1,39 +1,51 @@
-<div id="wrapper">
-    <span id="expiredMessage"> <t:messagesPanel />
-    </span>
-    <h1 id="title">Hello world!</h1>
+<section class="content-header">
+  <div class="container">
+    <div class="row mb-2">
+      <div class="col-18">
+        <!-- ページタイトルを記入 -->
+        <h3>Hello world!</h3>
+      </div>
+      <div class="col-18">
+        <!-- ページタイトル右の余白 -->
+      </div>
+    </div>
+  </div>
+</section>
+<section class="content">
+  <div class="container">
+    <t:messagesPanel />
+    <!-- ここより下にメインコンテンツを記入 -->
 
     <p>Welcome ${f:h(account.firstName)} ${f:h(account.lastName)}</p>
 
     <c:if test="${!empty lastLoginDate}">
-        <p id="lastLogin">Last login date is ${f:h(lastLoginDate)}.</p>
+      <p id="lastLogin">Last login date is ${f:h(lastLoginDate)}.</p>
     </c:if>
 
-    <div>
-        <a id="info" href="${f:h(pageContext.request.contextPath)}/accounts">
-            Account Information
-        </a>
-    </div>
+    <div class="row">
+      <a id="info" href="${f:h(pageContext.request.contextPath)}/accounts" class="btn-button mr-2">
+        アカウント情報
+      </a>
 
     <sec:authorize url="/unlock">
-    <div>
-        <a id="unlock" href="${f:h(pageContext.request.contextPath)}/unlock?form">
-            Unlock Account
+      <div>
+        <a id="unlock" href="${f:h(pageContext.request.contextPath)}/unlock?form" class="btn-button">
+          ロック解除
         </a>
-    </div>
+      </div>
     </sec:authorize>
 
-    <form:form action="${f:h(pageContext.request.contextPath)}/logout">
-        <button id="logout">Logout</button>
+    <form:form action="${f:h(pageContext.request.contextPath)}/logout" autocomplete="off">
+      <button id="logout" class="btn-button">ログアウト</button>
     </form:form>
-
     </div>
 
-    <br><br><hr><br><br>
+  </div>
+  <div class="container-fluid">
 
     <h2>Session</h2>
     <table>
-    <%
+      <%
     Enumeration enum_session = session.getAttributeNames();
     while(enum_session.hasMoreElements()) {
       String key = (String)enum_session.nextElement();
@@ -53,7 +65,7 @@
 
     <h2>Request</h2>
     <table>
-    <%
+      <%
     Enumeration enum_request = request.getAttributeNames();
     while(enum_request.hasMoreElements()) {
       String key = (String)enum_request.nextElement();
@@ -72,7 +84,7 @@
 
     <h2>application</h2>
     <table>
-    <%
+      <%
     Enumeration enum_application = application.getAttributeNames();
     while(enum_application.hasMoreElements()) {
       String key = (String)enum_application.nextElement();
@@ -91,7 +103,7 @@
 
     <h2>config</h2>
     <table>
-    <%
+      <%
     Enumeration enum_config = config.getInitParameterNames();
     while(enum_config.hasMoreElements()) {
       String key = (String)enum_config.nextElement();
@@ -108,4 +120,15 @@
     %>
     </table>
 
-</div>
+    <!-- ここより上にメインコンテンツを記入 -->
+  </div>
+</section>
+
+
+<footer class="main-footer">
+  <div class="float-right d-none d-sm-block">
+    <a href="#" class="btn-button">BackToTop</a>
+  </div>
+
+  <a href="#" class="btn-button">BackToTop</a>
+</footer>

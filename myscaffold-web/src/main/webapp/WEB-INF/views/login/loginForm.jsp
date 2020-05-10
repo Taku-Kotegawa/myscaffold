@@ -37,21 +37,21 @@
                     </c:if>
                 </div>
                 <form:form
-                    action="${f:h(pageContext.request.contextPath)}/login">
+                    action="${f:h(pageContext.request.contextPath)}/login" autocomplete="off">
                     <div class="input-group mb-3">
                         <input type="text" id="username" name="username"
-                            autocomplete="off" class="form-control"
+                            class="form-control"
                             placeholder="ユーザ名">
                     </div>
                     <div class="input-group mb-3">
                         <input type="password" id="password" name="password"
-                            autocomplete="off" class="form-control"
+                            class="form-control"
                             placeholder="パスワード">
                     </div>
                     <div class="row">
                         <!-- /.col -->
-                        <div class="col-8"></div>
-                        <div class="col-4">
+                        <div class="col-24"></div>
+                        <div class="col-12">
                             <input id="login" name="submit" type="submit"
                                 value="login"
                                 class="btn btn-primary btn-block" />
