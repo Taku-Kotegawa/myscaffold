@@ -24,6 +24,7 @@ import com.example.domain.service.authenticationevent.AuthenticationEventSharedS
 import com.example.domain.service.fileupload.FileUploadSharedService;
 import com.example.domain.service.passwordhistory.PasswordHistorySharedService;
 import com.github.dozermapper.core.Mapper;
+import org.apache.ibatis.session.RowBounds;
 import org.passay.CharacterRule;
 import org.passay.PasswordGenerator;
 import org.springframework.beans.factory.annotation.Value;
@@ -234,5 +235,15 @@ public class AccountSharedServiceImpl implements AccountSharedService {
     @Transactional(readOnly = true)
     public AccountImage getImage(String username) {
         return accountImageRepository.selectByPrimaryKey(username);
+    }
+
+    @Override
+    public List<Account> findAllByExample(AccountExample example, RowBounds rowBounds) {
+        return accountRepository.selectByExampleWithRowbounds(example, rowBounds);
+    }
+
+    @Override
+    public long countByExample(AccountExample example) {
+        return accountRepository.countByExample(example);
     }
 }

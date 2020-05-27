@@ -15,10 +15,14 @@
  */
 package com.example.domain.service.account;
 
+import com.example.domain.model.Account;
+import com.example.domain.model.AccountExample;
 import com.example.domain.model.AccountImage;
 import com.example.domain.model.AccountRoles;
+import org.apache.ibatis.session.RowBounds;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface AccountSharedService {
 
@@ -87,5 +91,20 @@ public interface AccountSharedService {
      * @return
      */
     AccountImage getImage(String username);
+
+    /**
+     *
+     * @param example
+     * @param rowBounds
+     * @return
+     */
+    List<Account> findAllByExample(AccountExample example, RowBounds rowBounds);
+
+    /**
+     *
+     * @param example
+     * @return
+     */
+    long countByExample(AccountExample example);
 
 }

@@ -2,14 +2,17 @@ package com.example.app.account;
 
 import com.example.app.account.AccountCreateForm.Confirm;
 import com.example.app.account.AccountCreateForm.CreateAccount;
+import com.example.domain.common.datatables.Column;
+import com.example.domain.common.datatables.DataTablesInput;
+import com.example.domain.common.datatables.DataTablesOutput;
 import com.example.domain.common.message.MessageKeys;
-import com.example.domain.model.AccountImage;
-import com.example.domain.model.AccountRoles;
-import com.example.domain.model.TempFile;
+import com.example.domain.model.*;
 import com.example.domain.service.account.AccountSharedService;
 import com.example.domain.service.fileupload.FileUploadSharedService;
 import com.example.domain.service.userdetails.LoggedInUser;
 import com.github.dozermapper.core.Mapper;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,9 +27,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.terasoluna.gfw.common.message.ResultMessages;
 
 import javax.inject.Inject;
+import javax.validation.Valid;
 import javax.validation.groups.Default;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @Controller
 @RequestMapping("accounts")
@@ -134,4 +140,89 @@ public class AccountController {
     }
 
 
+    /**
+     * 一覧画面の表示
+     */
+    @GetMapping(value = "list")
+    public String list(Model model) {
+
+        return "account/list";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/list/json", method = RequestMethod.GET)
+    public DataTablesOutput<AccountListBean> getUsers(@Valid DataTablesInput input) {
+
+        List<AccountListBean> accountListBeanList = new ArrayList<>();
+        DataTablesOutput<AccountListBean> output = new DataTablesOutput<>();
+
+        RowBounds rowBounds = new RowBounds(input.getStart(), input.getLength());
+
+
+        AccountExample example = new AccountExample();
+
+        // グローバルフィルタの入力値(input.getSearch().getValue())は、検索可能な項目に対するOR条件
+        // 大文字小文字の区別なし
+        if (!StringUtils.isEmpty(input.getSearch().getValue())) {
+            String gSearchWord = '%' + input.getSearch().getValue() + '%';
+            example.or().andUsernameLike(gSearchWord);
+            example.or().andFirstNameLike(gSearchWord);
+            example.or().andLastNameLike(gSearchWord);
+            example.or().andEmailLike(gSearchWord);
+            example.or().andUrlLike(gSearchWord);
+        }
+
+        // フィルードフィルタはAND条件
+        AccountExample.Criteria criteria = example.or();
+        for (Column column : input.getColumns()) {
+            if (column.getSearchable() && !StringUtils.isEmpty(column.getSearch().getValue())) {
+                String fSearchWord = '%' + column.getSearch().getValue() + '%';
+
+                switch(StringUtils.lowerCase(column.getData())) {
+                    case "username":
+                        criteria.andUsernameLike(fSearchWord);
+                        break;
+                    case "firstname":
+                        criteria.andFirstNameLike(fSearchWord);
+                        break;
+                    case "lastname":
+                        criteria.andLastNameLike(fSearchWord);
+                        break;
+                    case "email":
+                        criteria.andEmailLike(fSearchWord);
+                        break;
+                    case "url":
+                        criteria.andUrlLike(fSearchWord);
+                        break;
+                }
+            }
+        }
+
+        // 並び順
+        example.setOrderByClause(input.getOrderClause());
+
+        // 追加項目、HTMLエスケープ
+        List<Account> accountList = accountSharedService.findAllByExample(example, rowBounds);
+        for(Account account : accountList) {
+            AccountListBean accountListBean = beanMapper.map(account, AccountListBean.class);
+            accountListBean.setOperations("<a href=\"http://www.stnet.co.jp\"");
+
+
+            // 追加処理
+
+
+
+            accountListBeanList.add(accountListBean);
+        }
+        output.setData(accountListBeanList);
+
+
+        // 必要な情報をセット
+        output.setDraw(input.getDraw() + 1);
+        output.setRecordsTotal(accountSharedService.countByExample(new AccountExample()));
+        output.setRecordsFiltered(accountSharedService.countByExample(example));
+        output.setError("");
+
+        return output;
+    }
 }
