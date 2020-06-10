@@ -1,7 +1,6 @@
 // $spacer
 $spacer: .5rem;
 
-
 // 36分割
 $grid-columns: 36 !default;
 $grid-gutter-width: 5px !default;
@@ -23,3 +22,7 @@ $label-margin-bottom: 0;
 // custom-select
 $custom-select-padding-y: $input-btn-padding-y !default;
 $custom-select-padding-x: $input-btn-padding-x !default;
+
+// フォントサイズ
+$small-font-size:             90% !default;
+$form-feedback-margin-top:          0 !default;
