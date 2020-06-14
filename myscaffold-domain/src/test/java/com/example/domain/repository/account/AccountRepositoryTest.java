@@ -1,8 +1,10 @@
 package com.example.domain.repository.account;
 
-import com.example.domain.model.Account;
-import com.example.domain.model.AccountExample;
-import org.apache.commons.lang3.StringUtils;
+import com.example.domain.model.*;
+import com.example.domain.repository.authenticationevent.FailedAuthenticationRepository;
+import com.example.domain.repository.authenticationevent.SuccessfulAuthenticationRepository;
+import com.example.domain.repository.passwordhistory.PasswordHistoryRepository;
+import com.example.domain.repository.passwordreissue.PasswordReissueInfoRepository;
 import org.apache.ibatis.session.RowBounds;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,7 +15,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
+import static com.example.domain.common.StringUtils.rightPad;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -28,6 +30,25 @@ class AccountRepositoryTest {
 
     @Autowired
     AccountRepository target;
+
+    @Autowired
+    RoleRepository roleRepository;
+
+    @Autowired
+    SuccessfulAuthenticationRepository successfulAuthenticationRepository;
+
+    @Autowired
+    FailedAuthenticationRepository failedAuthenticationRepository;
+
+    @Autowired
+    PasswordHistoryRepository passwordHistoryRepository;
+
+    @Autowired
+    PasswordReissueInfoRepository passwordReissueInfoRepository;
+
+    @Autowired
+    AccountImageRepository accountImageRepository;
+
 
     @AfterAll
     static void tearDown() {
@@ -48,7 +69,7 @@ class AccountRepositoryTest {
     /**
      * accountテーブルにデータを挿入する。 (Repository.insert使用)
      *
-     * @param accounts Account(カンマ区切りで複数姿勢)
+     * @param accounts Account(カンマ区切りで複数姿勢z)
      */
     private void insertIntoDatabase(Account... accounts) {
         for (Account account : accounts) {
@@ -64,14 +85,27 @@ class AccountRepositoryTest {
      */
     private Account createAccount(String id) {
         Account account = new Account();
-        account.setUsername(StringUtils.rightPad(id, 88, "0"));
-        account.setPassword(StringUtils.rightPad("Password:" + id, 88, "0"));
-        account.setFirstName(StringUtils.rightPad("FirstName:" + id, 128, "0"));
-        account.setLastName(StringUtils.rightPad("LastName:" + id, 128, "0"));
-        account.setEmail(StringUtils.rightPad("Email:" + id, 128, "0"));
-        account.setUrl(StringUtils.rightPad("Url:" + id, 255, "0"));
-        account.setProfile(StringUtils.rightPad("Profile:" + id, 100000, "0"));
+        account.setUsername(rightPad(id, 88, "0"));
+        account.setPassword(rightPad("Password:" + id, 88, "0"));
+        account.setFirstName(rightPad("FirstName:" + id, 128, "0"));
+        account.setLastName(rightPad("LastName:" + id, 128, "0"));
+        account.setEmail(rightPad("Email:" + id, 128, "0"));
+        account.setUrl(rightPad("Url:" + id, 255, "0"));
+        account.setProfile(rightPad("Profile:" + id, 100000, "0"));
         return account;
+    }
+
+    /**
+     * Accountテーブル全件削除(依存するテーブルも含む)
+     */
+    private void deleteAccountAll() {
+        roleRepository.deleteByExample(new RoleExample());
+        accountImageRepository.deleteByExample(new AccountImageExample());
+        successfulAuthenticationRepository.deleteByExample(new SuccessfulAuthenticationExample());
+        failedAuthenticationRepository.deleteByExample(new FailedAuthenticationExample());
+        passwordHistoryRepository.deleteByExample(new PasswordHistoryExample());
+        passwordReissueInfoRepository.deleteByExample(new PasswordReissueInfoExample());
+        target.deleteByExample(new AccountExample());
     }
 
     @Nested
@@ -83,7 +117,7 @@ class AccountRepositoryTest {
         @DisplayName("[正常系]テーブルに登録された件数を返す(0件)")
         void test001() {
             // 準備
-            target.deleteByExample(new AccountExample());
+            deleteAccountAll();
 
             // 実行
             long actualCount = target.countByExample(new AccountExample());
@@ -96,9 +130,9 @@ class AccountRepositoryTest {
         @DisplayName("[正常系]テーブルに登録された件数を返す(1件)")
         void test002() {
             // 準備
-            target.deleteByExample(new AccountExample());
+            deleteAccountAll();
             insertIntoDatabase(
-                    createAccount("1")
+                    createAccount("1") // OK
             );
 
             // 実行
@@ -112,10 +146,10 @@ class AccountRepositoryTest {
         @DisplayName("[正常系]テーブルに登録された件数を返す(2件)")
         void test003() {
             // 準備
-            target.deleteByExample(new AccountExample());
+            deleteAccountAll();
             insertIntoDatabase(
-                    createAccount("1"),
-                    createAccount("2")
+                    createAccount("1"), // OK
+                    createAccount("2")  // OK
             );
 
             // 実行
@@ -129,10 +163,10 @@ class AccountRepositoryTest {
         @DisplayName("[正常系]テーブルに登録されたデータから検索条件に合致する件数を返す")
         void test004() {
             // 準備
-            target.deleteByExample(new AccountExample());
+            deleteAccountAll();
             insertIntoDatabase(
-                    createAccount("1"),
-                    createAccount("2")
+                    createAccount("1"), // NG
+                    createAccount("2")  // OK
             );
 
             // 実行
@@ -154,21 +188,26 @@ class AccountRepositoryTest {
         @DisplayName("[正常系]指定した主キーでデータを削除する、戻り値は削除件数。")
         void test001() {
             // 準備
-            target.deleteByExample(new AccountExample());
+            deleteAccountAll();
             insertIntoDatabase(
-                    createAccount("10"),
-                    createAccount("11"),
-                    createAccount("20")
+                    createAccount("10"), // NOT
+                    createAccount("11"), // DELETE
+                    createAccount("20")  // NOT
             );
 
             // 実行
-            int actualDeleteCount = target.deleteByPrimaryKey(StringUtils.rightPad("11", 88, "0"));
+            int actualDeleteCount = target.deleteByPrimaryKey(rightPad("11", 88, "0"));
 
             // 検証
-            assertThat(actualDeleteCount).isEqualTo(1L);
+            assertThat(actualDeleteCount).isEqualTo(1L); // 削除件数は1件
 
-            long actualExistCount = target.countByExample(new AccountExample());
-            assertThat(actualExistCount).isEqualTo(2L);
+            AccountExample example = new AccountExample();
+            example.or().andUsernameEqualTo(rightPad("11", 88, "0"));
+            long actualExistCount = target.countByExample(example);
+            assertThat(actualExistCount).isEqualTo(0L); // 残っていない
+
+            long actualExistCount2 = target.countByExample(new AccountExample());
+            assertThat(actualExistCount2).isEqualTo(2L); // 2件残る
         }
     }
 
@@ -181,11 +220,11 @@ class AccountRepositoryTest {
         @DisplayName("[正常系]条件に合致したデータを削除する、戻り値は削除件数。(1件)")
         void test001() {
             // 準備
-            target.deleteByExample(new AccountExample());
+            deleteAccountAll();
             insertIntoDatabase(
-                    createAccount("1"),
-                    createAccount("2"),
-                    createAccount("3")
+                    createAccount("1"), // NOT
+                    createAccount("2"), // DELETE
+                    createAccount("3")  // NOT
             );
 
             // 実行
@@ -194,21 +233,25 @@ class AccountRepositoryTest {
             int actualDeleteCount = target.deleteByExample(example);
 
             // 検証
-            assertThat(actualDeleteCount).isEqualTo(1L);
+            assertThat(actualDeleteCount).isEqualTo(1L); // 削除件数は1件
 
             long actualCount = target.countByExample(example);
-            assertThat(actualCount).isEqualTo(0L);
+            assertThat(actualCount).isEqualTo(0L); // テーブルに残っていない
+
+            long actualExistCount = target.countByExample(new AccountExample());
+            assertThat(actualExistCount).isEqualTo(2L); // 2件残る
+
         }
 
         @Test
         @DisplayName("[正常系]条件に合致したデータを削除する、戻り値は削除件数。(2件)")
         void test002() {
             // 準備
-            target.deleteByExample(new AccountExample());
+            deleteAccountAll();
             insertIntoDatabase(
-                    createAccount("10"),
-                    createAccount("11"),
-                    createAccount("20")
+                    createAccount("10"), // OK
+                    createAccount("11"), // OK
+                    createAccount("20")  // NG
             );
 
             // 実行
@@ -217,10 +260,13 @@ class AccountRepositoryTest {
             int actualDeleteCount = target.deleteByExample(example);
 
             // 検証
-            assertThat(actualDeleteCount).isEqualTo(2L);
+            assertThat(actualDeleteCount).isEqualTo(2L); // 削除件数は2件
 
             long actualCount = target.countByExample(example);
-            assertThat(actualCount).isEqualTo(0L);
+            assertThat(actualCount).isEqualTo(0L); // テーブルに残っていない
+
+            long actualExistCount = target.countByExample(new AccountExample());
+            assertThat(actualExistCount).isEqualTo(1L); // 1件残る
         }
     }
 
@@ -233,25 +279,27 @@ class AccountRepositoryTest {
         @DisplayName("[正常系]データが登録され、全項目に値がセットされる。戻り値は登録件数。")
         void test001() {
             // 準備
-            target.deleteByExample(new AccountExample());
+            deleteAccountAll();
 
             // 実行
             Account expectedAccount = createAccount("1");
             int actualCount = target.insert(expectedAccount);
 
             // 検証
-            assertThat(actualCount).isEqualTo(1L);
+            assertThat(actualCount).isEqualTo(1L); // 登録件数は1件
 
             Account actualAccount = target.selectByPrimaryKey(expectedAccount.getUsername());
-            assertThat(actualAccount).isEqualTo(expectedAccount);
+            assertThat(actualAccount).isEqualTo(expectedAccount); // 正しく登録されている
         }
 
         @Test
         @DisplayName("[異常系]一意制約違反でSQL例外がスローされる。")
         void test101() {
             // 準備
-            target.deleteByExample(new AccountExample());
-            target.insert(createAccount("1"));
+            deleteAccountAll();
+            insertIntoDatabase(
+                    createAccount("1")
+            );
 
             // 実行・検証
             assertThatThrownBy(() -> {
@@ -270,7 +318,7 @@ class AccountRepositoryTest {
         @DisplayName("[正常系]データが登録され、全項目に値がセットされる。戻り値は登録件数。(DBの初期値の検証なし)")
         void test001() {
             // 準備
-            target.deleteByExample(new AccountExample());
+            deleteAccountAll();
 
             // 実行
             Account expectedAccount = createAccount("1");
@@ -287,8 +335,10 @@ class AccountRepositoryTest {
         @DisplayName("[異常系]一意制約違反でSQL例外がスローされる。")
         void test101() {
             // 準備
-            target.deleteByExample(new AccountExample());
-            target.insert(createAccount("1"));
+            deleteAccountAll();
+            insertIntoDatabase(
+                    createAccount("1")
+            );
 
             // 実行・検証
             assertThatThrownBy(() -> {
@@ -306,13 +356,15 @@ class AccountRepositoryTest {
         @DisplayName("[正常系]主キーを指定して抽出できること")
         void test001() {
             // 準備
-            target.deleteByExample(new AccountExample());
-            target.insert(createAccount("10")); // NG
-            target.insert(createAccount("11")); // OK
-            target.insert(createAccount("23")); // NG
+            deleteAccountAll();
+            insertIntoDatabase(
+                    createAccount("10"), // NG
+                    createAccount("11"), // OK
+                    createAccount("23")  // NG
+            );
 
             // 実行
-            Account actualAccount = target.selectByPrimaryKey(StringUtils.rightPad("11", 88, "0"));
+            Account actualAccount = target.selectByPrimaryKey(rightPad("11", 88, "0"));
 
             // 検証
             assertThat(actualAccount).isEqualTo(createAccount("11"));
@@ -322,8 +374,8 @@ class AccountRepositoryTest {
         @DisplayName("[異常系] 指定したキーのデータが未登録の場合はnull")
         void test101() {
             // 準備
-            target.deleteByExample(new AccountExample());
-            target.insert(createAccount("1"));
+            deleteAccountAll();
+            insertIntoDatabase(createAccount("1"));
 
             // 実行
             Account actualAccount = target.selectByPrimaryKey("NotExist");
@@ -342,11 +394,13 @@ class AccountRepositoryTest {
         @DisplayName("[正常系]検索条件を指定して抽出できること")
         void test001() {
             // 準備
-            target.deleteByExample(new AccountExample());
-            target.insert(createAccount("10")); // NG
-            target.insert(createAccount("11")); // OK
-            target.insert(createAccount("12")); // OK
-            target.insert(createAccount("23")); // NG
+            deleteAccountAll();
+            insertIntoDatabase(
+                    createAccount("10"), // NG
+                    createAccount("11"), // OK
+                    createAccount("12"), // OK
+                    createAccount("23")  // NG
+            );
 
             // 実行
             AccountExample example = new AccountExample();
@@ -373,14 +427,16 @@ class AccountRepositoryTest {
         @DisplayName("[正常系]件数と検索条件を指定して抽出できること")
         void test001() {
             // 準備
-            target.deleteByExample(new AccountExample());
-            target.insert(createAccount("10")); // NG
-            target.insert(createAccount("11")); // NG
-            target.insert(createAccount("12")); // OK
-            target.insert(createAccount("13")); // OK
-            target.insert(createAccount("14")); // OK
-            target.insert(createAccount("15")); // NG
-            target.insert(createAccount("23")); // NG
+            deleteAccountAll();
+            insertIntoDatabase(
+                    createAccount("10"), // NG
+                    createAccount("11"), // NG
+                    createAccount("12"), // OK
+                    createAccount("13"), // OK
+                    createAccount("14"), // OK
+                    createAccount("15"), // NG
+                    createAccount("23")  // NG
+            );
 
             // 実行
             RowBounds rowBounds = new RowBounds(2, 3);
@@ -408,12 +464,14 @@ class AccountRepositoryTest {
         @DisplayName("[正常系]主キーを指定して更新できること、戻値は更新件数")
         void test001() {
             // 準備
-            target.deleteByExample(new AccountExample());
-            target.insert(createAccount("10"));
+            deleteAccountAll();
+            insertIntoDatabase(
+                    createAccount("10")
+            );
 
             // 実行
             Account expectedAccount = createAccount("11");
-            expectedAccount.setUsername(StringUtils.rightPad("10", 88, "0"));
+            expectedAccount.setUsername(rightPad("10", 88, "0"));
             int actualCount = target.updateByPrimaryKey(expectedAccount);
 
             // 検証
@@ -427,8 +485,10 @@ class AccountRepositoryTest {
         @DisplayName("[正常系]指定した主キーのデータがなければ0が返る。")
         void test002() {
             // 準備
-            target.deleteByExample(new AccountExample());
-            target.insert(createAccount("10"));
+            deleteAccountAll();
+            insertIntoDatabase(
+                    createAccount("10")
+            );
 
             // 実行
             Account expectedAccount = createAccount("11");
@@ -447,12 +507,14 @@ class AccountRepositoryTest {
         @DisplayName("[正常系]主キーを指定して更新できること、戻値は更新件数")
         void test001() {
             // 準備
-            target.deleteByExample(new AccountExample());
-            target.insert(createAccount("10"));
+            deleteAccountAll();
+            insertIntoDatabase(
+                    createAccount("10")
+            );
 
             // 実行
             Account expectedAccount = createAccount("11");
-            expectedAccount.setUsername(StringUtils.rightPad("10", 88, "0"));
+            expectedAccount.setUsername(rightPad("10", 88, "0"));
             int actualCount = target.updateByPrimaryKeySelective(expectedAccount);
 
             // 検証
@@ -466,8 +528,10 @@ class AccountRepositoryTest {
         @DisplayName("[正常系]指定した主キーのデータがなければ0が返る。")
         void test002() {
             // 準備
-            target.deleteByExample(new AccountExample());
-            target.insert(createAccount("10"));
+            deleteAccountAll();
+            insertIntoDatabase(
+                    createAccount("10")
+            );
 
             // 実行
             Account expectedAccount = createAccount("11");
@@ -481,17 +545,19 @@ class AccountRepositoryTest {
         @DisplayName("[正常系]特定の項目のみ更新する。")
         void test003() {
             // 準備
-            target.deleteByExample(new AccountExample());
-            target.insert(createAccount("10"));
+            deleteAccountAll();
+            insertIntoDatabase(
+                    createAccount("10")
+            );
 
             // 実行
             Account expectedAccount = new Account();
-            expectedAccount.setUsername(StringUtils.rightPad("10", 88, "0"));
+            expectedAccount.setUsername(rightPad("10", 88, "0"));
             expectedAccount.setFirstName("Change");
             target.updateByPrimaryKeySelective(expectedAccount);
 
             // 検証
-            Account actualAccount = target.selectByPrimaryKey(StringUtils.rightPad("10", 88, "0"));
+            Account actualAccount = target.selectByPrimaryKey(rightPad("10", 88, "0"));
             assertThat(actualAccount.getFirstName()).isEqualTo("Change");
 
             // FirstName以外を比較
@@ -508,18 +574,20 @@ class AccountRepositoryTest {
         @DisplayName("[正常系]条件を指定して更新できること、戻値は更新件数")
         void test001() {
             // 準備
-            target.deleteByExample(new AccountExample());
-            target.insert(createAccount("10"));
-            target.insert(createAccount("11"));
-            target.insert(createAccount("12"));
-            target.insert(createAccount("20"));
+            deleteAccountAll();
+            insertIntoDatabase(
+                    createAccount("10"),
+                    createAccount("11"),
+                    createAccount("12"),
+                    createAccount("20")
+            );
 
             // 実行
             Account expectedAccount = createAccount("11");
             expectedAccount.setPassword("change");
 
             AccountExample example = new AccountExample();
-            example.or().andUsernameEqualTo(StringUtils.rightPad("11", 88, "0"));
+            example.or().andUsernameEqualTo(rightPad("11", 88, "0"));
             int actualCount = target.updateByExample(expectedAccount, example);
 
             // 検証
@@ -533,11 +601,13 @@ class AccountRepositoryTest {
         @DisplayName("[正常系]指定した条件のデータがなければ0が返る。")
         void test002() {
             // 準備
-            target.deleteByExample(new AccountExample());
-            target.insert(createAccount("10"));
-            target.insert(createAccount("11"));
-            target.insert(createAccount("12"));
-            target.insert(createAccount("20"));
+            deleteAccountAll();
+            insertIntoDatabase(
+                    createAccount("10"),
+                    createAccount("11"),
+                    createAccount("12"),
+                    createAccount("20")
+            );
 
             // 実行
             Account expectedAccount = createAccount("11");
@@ -558,18 +628,20 @@ class AccountRepositoryTest {
         @DisplayName("[正常系]条件を指定して更新できること、戻値は更新件数")
         void test001() {
             // 準備
-            target.deleteByExample(new AccountExample());
-            target.insert(createAccount("10"));
-            target.insert(createAccount("11"));
-            target.insert(createAccount("12"));
-            target.insert(createAccount("20"));
+            deleteAccountAll();
+            insertIntoDatabase(
+                    createAccount("10"),
+                    createAccount("11"),
+                    createAccount("12"),
+                    createAccount("20")
+            );
 
             // 実行
             Account expectedAccount = createAccount("11");
             expectedAccount.setPassword("change");
 
             AccountExample example = new AccountExample();
-            example.or().andUsernameEqualTo(StringUtils.rightPad("11", 88, "0"));
+            example.or().andUsernameEqualTo(rightPad("11", 88, "0"));
             int actualCount = target.updateByExampleSelective(expectedAccount, example);
 
             // 検証
@@ -583,11 +655,13 @@ class AccountRepositoryTest {
         @DisplayName("[正常系]指定した条件のデータがなければ0が返る。")
         void test002() {
             // 準備
-            target.deleteByExample(new AccountExample());
-            target.insert(createAccount("10"));
-            target.insert(createAccount("11"));
-            target.insert(createAccount("12"));
-            target.insert(createAccount("20"));
+            deleteAccountAll();
+            insertIntoDatabase(
+                    createAccount("10"),
+                    createAccount("11"),
+                    createAccount("12"),
+                    createAccount("20")
+            );
 
             // 実行
             Account expectedAccount = createAccount("11");
@@ -603,17 +677,19 @@ class AccountRepositoryTest {
         @DisplayName("[正常系]特定の条件で選択可能な複数のデータの特定の項目を一括更新、戻値は更新件数")
         void test003() {
             // 準備
-            target.deleteByExample(new AccountExample());
-            target.insert(createAccount("10"));
-            target.insert(createAccount("11"));
-            target.insert(createAccount("12"));
-            target.insert(createAccount("20"));
+            deleteAccountAll();
+            insertIntoDatabase(
+                    createAccount("10"),
+                    createAccount("11"),
+                    createAccount("12"),
+                    createAccount("20")
+            );
 
             // 実行
             Account expectedAccount = new Account();
             expectedAccount.setPassword("Change");
             AccountExample example = new AccountExample();
-            example.or().andUsernameNotEqualTo(StringUtils.rightPad("20", 88, "0"));
+            example.or().andUsernameNotEqualTo(rightPad("20", 88, "0"));
             int actualCount = target.updateByExampleSelective(expectedAccount, example);
 
             // 検証
