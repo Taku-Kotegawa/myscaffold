@@ -18,11 +18,17 @@
         <sec:custom-filter ref="userIdMDCPutFilter" after="ANONYMOUS_FILTER"/>
         <sec:session-management/>
         <sec:intercept-url pattern="/login/**" access="permitAll"/>
+        <sec:intercept-url pattern="/guruguru/**" access="permitAll"/>
+        <sec:intercept-url pattern="/accounts/list/**" access="permitAll"/>
         <sec:intercept-url pattern="/accounts/create" access="permitAll"/>
         <sec:intercept-url pattern="/reissue/**" access="permitAll"/>
         <sec:intercept-url pattern="/api/receivedmail" access="permitAll"/>
         <sec:intercept-url pattern="/unlock/**" access="hasRole('ADMIN')"/>
+        <sec:intercept-url pattern="/simpleform/**" access="permitAll"/>
+
+        <!-- /** は一番下 -->
         <sec:intercept-url pattern="/**" access="isAuthenticated()"/>
+
     </sec:http>
 
     <sec:authentication-manager>
@@ -73,7 +79,6 @@
           class="com.example.app.common.security.CacheClearLogoutSuccessHandler">
         <constructor-arg value="/"/>
     </bean>
-
 
     <sec:global-method-security pre-post-annotations="enabled"/>
 

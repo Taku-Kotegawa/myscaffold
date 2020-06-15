@@ -16,7 +16,15 @@
 <!-- <script src="${pageContext.request.contextPath}/resources/AdminLTE/plugins/datatables-buttons/js/buttons.html5.min.js"></script> -->
 <script src="${pageContext.request.contextPath}/resources/AdminLTE/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
 
+<!-- fiexed Hader -->
+<!-- <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/AdminLTE/plugins/datatables-fixedheader/css/fixedHeader.bootstrap4.min.css"> -->
+<!-- <script src="${pageContext.request.contextPath}/resources/AdminLTE/plugins/datatables-fixedheader/js/dataTables.fixedHeader.min.js"></script> -->
+<!-- <script src="${pageContext.request.contextPath}/resources/AdminLTE/plugins/datatables-fixedheader/js/fixedHeader.bootstrap4.min.js"></script> -->
 
+<!-- ColReorder -->
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/AdminLTE/plugins/datatables-colreorder/css/colReorder.bootstrap4.min.css">
+<script src="${pageContext.request.contextPath}/resources/AdminLTE/plugins/datatables-colreorder/js/dataTables.colReorder.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/AdminLTE/plugins/datatables-colreorder/js/colReorder.bootstrap4.min.js"></script>
 
 
 

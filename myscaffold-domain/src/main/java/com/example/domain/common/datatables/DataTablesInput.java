@@ -61,6 +61,11 @@ public class DataTablesInput {
   private List<Column> columns = new ArrayList<>();
 
   /**
+   * ダミー
+   */
+  private String orderByClause;
+
+  /**
    * 
    * @return a {@link Map} of {@link Column} indexed by name
    */
@@ -126,7 +131,7 @@ public class DataTablesInput {
    * OrderBy文字列の組み立て
    * @return OrderBy区
    */
-  public String getOrderClause() {
+  public String getOrderByClause() {
 
     List<String> orderClause = new ArrayList<>();
     for(Order order : this.getOrder()) {

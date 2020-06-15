@@ -9,19 +9,12 @@
 ## プラグインの入手先
 
 ### AdminLTE
-
 https://github.com/ColorlibHQ/AdminLTE/releases
 
 ### DataTables Checkboexes
-
 https://github.com/gyrocode/jquery-datatables-checkboxes/releases
 
-### Bootstrap Datepicker
-
-https://github.com/uxsolutions/bootstrap-datepicker/releases
-
 ### Kendo ui
-
 https://www.telerik.com/download/kendo-ui-core
 ※要アカウント登録
 

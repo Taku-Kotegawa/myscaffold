@@ -1,8 +1,10 @@
 package com.example.domain.common.datatables;
 
+import com.example.domain.common.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.CodePointLength;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -18,6 +20,7 @@ public class Column {
    * @see http://datatables.net/reference/option/columns.data
    */
   @NotBlank
+  @CodePointLength
   private String data;
 
   /**
@@ -58,4 +61,8 @@ public class Column {
     this.search.setValue(searchValue);
   }
 
+
+  public String getDbname() {
+    return StringUtils.toLowerSnakeCase(this.data);
+  }
 }

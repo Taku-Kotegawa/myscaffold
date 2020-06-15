@@ -1,45 +1,43 @@
 <%@ include file="/WEB-INF/views/common/includes/include-datatables.jsp" %>
-<style>
-  div.dataTables_wrapper div.dataTables_filter {
-    text-align: unset;
-  }
-</style>
 
 <section class="content-header">
   <div class="container">
     <div class="row mb-2">
       <div class="col-18">
-        <!-- ページタイトルを記入 -->
-        <h3>アカウントリスト</h3>
+        <h4>アカウントリスト</h4>
       </div>
       <div class="col-18 text-right">
-        <!-- ページタイトル右の余白 -->
-        <a href="create?form" class="btn-button">新規登録</a>
       </div>
     </div>
   </div>
 </section>
+
 <section class="content">
   <div class="container">
+
     <t:messagesPanel />
     <!-- ここより下にメインコンテンツを記入 -->
 
-    <div class="card">
+    <!-- <div class="card">
       <div class="card-body">
         <div class="row">
           <div class-="co4">
             <label>氏名</label>
-            <input type="text" id="col_filter_1" data-column="1" class="form-control dataTables_column_filter">
+            <input type="text" id="col_filter_2" data-column="2" class="form-control dataTables_column_filter">
           </div>
         </div>
-
       </div>
-    </div>
+    </div> -->
 
 
-    <table id="acountlist" class="table-sm">
+    <table id="acountlist" class="table-sm table-striped">
       <thead>
         <tr class="filter">
+          <th class="text-center px-1">
+            <button class="btn" onclick="checkAll();">
+              <i class="fas fa-check"></i>
+            </button>
+          </th>
           <th></th>
           <th></th>
           <th></th>
@@ -48,7 +46,8 @@
           <th></th>
         </tr>
         <tr class="title">
-          <th></th>
+          <th class="text-center px-0"></th>
+          <th>操作</th>
           <th>username</th>
           <th>firstName</th>
           <th>lastName</th>
@@ -70,85 +69,76 @@
       function () {
 
         // 項目単位フィルタ用のInputフィールドを追加する。
+        var startcolnum = 2;
         $('tr.filter th').each(function () {
           var idx = $(this).index();
-          if (1 <= idx) {
-            $(this).html('<input type="text" id="col_filter_' + idx + '" data-column="' + idx +
+          if (startcolnum <= idx) {
+            $(this).html('<input type="text" id="col_filter_' + idx + '" _data-column="' + idx +
               '" class="dataTables_column_filter form-control" />');
           }
         });
 
-        // DataTablesの設定する要素を指定
-        var target = '#acountlist';
+        var table = $('#acountlist').DataTable({
 
-        var table = $(target).DataTable({
+          // 'serverSide': false,
+          // 'ajax': 'list/json2',
 
           // 一覧に表示する項目とJSONの項目にマッピング
-          'columns': [{
-              'data': 'username',
-              className: ''
-            },
-            {
-              'data': 'username',
-              className: ''
-            },
-            {
-              'data': 'firstName',
-              className: ''
-            },
-            {
-              'data': 'lastName',
-              className: ''
-            },
-            {
-              'data': 'email',
-              className: ''
-            },
-            {
-              'data': 'url',
-              className: ''
-            },
+          'columns': [
+            {'data': 'username',              className: 'text-center'},
+            {'data': 'operations',            className: ''           },
+            {'data': 'username',              className: ''           },
+            {'data': 'firstName',             className: ''           },
+            {'data': 'lastName',              className: ''           },
+            {'data': 'email',                 className: ''           },
+            {'data': 'url',                   className: ''           },
           ],
 
-          // 主キー項目を指定
-          'rowId': 'username',
-
           // 項目別の設定
-          'columnDefs': [{
-            'targets': 0,
-            'checkboxes': {
-              'selectRow': true,
-              'orderable': false,
-              'searchable': false
-            },
-          }, ],
+          'columnDefs': [
+            {'targets': 0, 'orderable': false, 'searchable': false,
+              'checkboxes': {'selectRow': true }, },
+            {'targets': 1, 'orderable': false, 'searchable': false},
+          ],
 
           // 初期ソート
           'order': [
-            [1, 'asc']
+            [2, 'asc']
           ],
 
           // ボタンの表示
-          'buttons': ['colvis', 'excel', 'stateClear', 'createnew'],
+          'buttons': ['colvis', 'stateClear', 'createnew'],
 
           // データロード後処理
           'initComplete': function (settings, json) {
-
-            // ローディング画面のクリア
-            $('#loading').hide();
-
-            // グローバルフィルターでEnterキーでサーバに送信
+            // グローバルフィルターの仕様変更(Enterキーでサーバに送信
             fnGlobalFilterOnReturn(table);
-
           },
-
         });
 
-        // グローバルフィルタがENTERで動作する様に変更
-        //        $(target).dataTable().fnFilterOnReturn();
+        // ページネーション後に画面トップに戻る
+        table.on('page.dt', function () {
+          $('html, body').animate({
+            scrollTop: 0
+          }, 300);
+        });
 
         // 項目単位フィルタの追加
-        addFieldFilter(table)
+        addFieldFilter2(table)
 
       });
+
+  // 一括チェック処理(Server-side用、要StateSave)
+  function checkAll() {
+    var storageKey = "DataTables_acountlist_/myscaffold-web/accounts/list";
+    var url = '/myscaffold-web/accounts/list/allkeyjson';
+    var stateSaveData = JSON.parse(localStorage.getItem(storageKey));
+    $.getJSON(url, (data) => {
+      data.forEach(function (value) {
+        stateSaveData.checkboxes[0][value] = 1;
+      });
+      localStorage.setItem(storageKey, JSON.stringify(stateSaveData));
+      location.reload()
+    });
+  }
 </script>

@@ -32798,10 +32798,11 @@ a.text-muted:hover {
   background-color: white;
 }
 
-.btn-button {
+.btn-button, .dt-buttons .btn-secondary {
   position: relative;
   display: inline-block;
   box-sizing: border-box;
+  padding: 4px 8px;
   cursor: pointer;
   transition: all 0.1s;
   text-align: center;
@@ -33081,6 +33082,10 @@ th.select-all {
   background-color: #eff4fa;
 }
 
+.page-link:focus {
+  box-shadow: unset;
+}
+
 .k-dropdown-wrap.k-state-default {
   border-radius: 2px;
 }
@@ -33095,5 +33100,21 @@ th.select-all {
 
 .k-state-default > .k-select {
   border-left: solid 1px #c5c5c5 !important;
+}
+
+.dt-buttons .dropdown-toggle::after {
+  content: unset;
+}
+
+div.dataTables_wrapper div.dataTables_filter {
+  text-align: unset;
+}
+
+table.dataTable.fixedHeader-floating {
+  top: 45px !important;
+}
+
+table.dataTable th {
+  white-space: nowrap;
 }
 /*# sourceMappingURL=adminlte.min.css.map */

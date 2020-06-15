@@ -14,9 +14,7 @@
         <spring:message code="${titleKey}" text="myscaffold" />
     </title>
     <link rel="stylesheet"
-        href="${pageContext.request.contextPath}/resources/AdminLTE/dist/css/AdminLTE-core.css">
-    <link rel="stylesheet"
-        href="${pageContext.request.contextPath}/resources/AdminLTE/dist/css/AdminLTE-pages.css">
+        href="${pageContext.request.contextPath}/resources/AdminLTE/dist/css/adminlte.min.css">
 </head>
 
 <body class="login-page">

@@ -10,6 +10,9 @@ $.extend($.fn.dataTable.defaults, {
     // サーバサイド処理を有効
     'serverSide': true,
 
+    // 遅延読込
+    "deferRender": true,
+
     // データ取得先のURLの初期値設定
     // flattenはSpringMVCでデータを受け取るためのクエリパラメータの変換処理
     'ajax': {
@@ -53,9 +56,13 @@ $.extend($.fn.dataTable.defaults, {
             'colvis': '<i class="fas fa-filter"></i>',
             'copy': '<i class="fa fa-copy fa-fw"></i>',
             'excel': '<i class="fa fa-file-excel-o fa-fw"></i>'
-        }
+        },
     },
+    // 列順変更許可
+    'colReorder': true,
+
 });
+
 
 /**
  * 項目単位フィルタを追加する共通処理
@@ -68,25 +75,12 @@ function addFieldFilter(table) {
         if (e.which == 13 || this.value.length == 0) {
             var idx = $(this).attr('data-column');
             table.column(idx).search(this.value).draw();
-            fnRecoverFieldSearch(table);
+//            fnRecoverFieldSearch(table);
         }
     });
 
     // 画面リロード時の復元
     fnRecoverFieldSearch(table);
-}
-
-/**
- * グローバルフィルターでEnterキーで送信
- * @param {*} table
- */
-function fnGlobalFilterOnReturn(table) {
-    $('.dataTables_filter input').unbind();
-    $('.dataTables_filter input').bind('keyup', function (e) {
-        if (e.which == 13 || this.value.length == 0) {
-            table.search(this.value).draw();
-        }
-    });
 }
 
 /**
@@ -103,13 +97,72 @@ function fnRecoverFieldSearch(table) {
     });
 }
 
+function addFieldFilter2(table) {
+
+    // 項目単位フィルタのためのイベント処理を設定する。
+    $('input.dataTables_column_filter').on('keyup', function (e, s) {
+        if (e.which == 13 || this.value.length == 0) {
+            var th = $(this).parents('th')[0];
+            var visIndex = th.cellIndex;
+            table.column(visIndex + ':visIdx').search(this.value).draw();
+        }
+    });
+
+    fnRecoverFieldSearch(table);
+//    restoreColumnFilterByColReOrder(table);
+
+}
+
+
+//列指定検索テキストボックスの値復元（ColReorder対応）
+// function restoreColumnFilterByColReOrder(table) {
+
+//     // 列の並び順を控えていく
+//     var colOrder = table.colReorder.order();
+
+//     // DataTablesで定義されている列数分だけループする
+//     table.columns().every(function () {
+//         var data = this.data();
+//         var idx = this.index();
+//         var str = table.columns(idx).search()[0];
+//         $('#col' + colOrder[idx] + '_filter').val(str);
+//     });
+// }
+
+
+
+// DataTables で列検索を行い再描画する（ColReorder対応）
+// function filterColumnByColReOrder(table, col) {
+//     var th = $(col).parents('th')[0];
+//     var visIndex = th.cellIndex;
+//     var str = $(col).val();
+//     table.column(visIndex + ':visIdx').search(str).draw();
+// }
+
+
+/**
+ * グローバルフィルターでEnterキーで送信
+ * @param {*} table
+ */
+function fnGlobalFilterOnReturn(table) {
+    $('.dataTables_filter input').unbind();
+    $('.dataTables_filter input').bind('keyup', function (e) {
+        if (e.which == 13 || this.value.length == 0) {
+            table.search(this.value).draw();
+        }
+    });
+}
+
+
+
 
 
 /**
  * DataTables Ajaxクエリの修正
  * @param {*} params
  */
-function flatten(params) {
+function flatten(params, settings) {
+
     params.columns.forEach(function (column, index) {
         params['columns[' + index + '].data'] = column.data;
         params['columns[' + index + '].name'] = column.name;
@@ -164,45 +217,6 @@ $.fn.dataTable.ext.buttons.createnew = {
     text: '<i class="far fa-file"></i>',
     titleAttr: '新規作成',
     action: function (e, dt, node, config) {
-//        window.open("create?form", "CreateNew", "menubar=no,location=no,resizable=no,scrollbars=no,status=no");;
         window.location.href = "create?form&distination=list";
     }
-};
-
-
-/**
- * This plug-in removes the default behaviour of DataTables to filter on each
- * keypress, and replaces with it the requirement to press the enter key to
- * perform the filter.
- *
- *  @name fnFilterOnReturn
- *  @summary Require the return key to be pressed to filter a table
- *  @author [Jon Ranes](http://www.mvccms.com/)
- *
- *  @returns {jQuery} jQuery instance
- *
- *  @example
- *    $(document).ready(function() {
- *        $('.dataTable').dataTable().fnFilterOnReturn();
- *    } );
- */
-jQuery.fn.dataTableExt.oApi.fnFilterOnReturn = function (oSettings) {
-    var _that = this;
-
-    this.each(function (i) {
-//        $.fn.dataTableExt.iApiIndex = i;
-//        var $this = this;
-        var anControl = $('input', _that.fnSettings().aanFeatures.f);
-        anControl
-//            .unbind('keyup search input')
-            .bind('keyup', function (e) {
-                console.log('aaa:' + anControl.val().length);
-                if (e.which == 13 || 0 == anControl.val().length) {
-  //                  $.fn.dataTableExt.iApiIndex = i;
-                    _that.fnFilter(anControl.val());
-                }
-            });
-        return this;
-    });
-    return this;
 };

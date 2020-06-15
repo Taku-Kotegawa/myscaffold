@@ -17,7 +17,7 @@
 
 
 
-  <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/AdminLTE/dist/css/AdminLTE.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/AdminLTE/dist/css/adminlte.min.css">
   <!-- Font Awesome -->
   <link rel="stylesheet"
     href="${pageContext.request.contextPath}/resources/AdminLTE/plugins/fontawesome-free/css/all.min.css">

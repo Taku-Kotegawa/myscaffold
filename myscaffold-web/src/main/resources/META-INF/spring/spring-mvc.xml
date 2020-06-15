@@ -15,7 +15,7 @@
     <context:property-placeholder
         location="classpath*:/META-INF/spring/*.properties" />
 
-    <mvc:annotation-driven>
+    <mvc:annotation-driven validator="validator">
         <mvc:argument-resolvers>
             <bean
                 class="org.springframework.data.web.PageableHandlerMethodArgumentResolver" />
@@ -138,4 +138,12 @@
 
 
     <mvc:view-controller path="/login" view-name="login/loginForm"/>
+
+
+    <!-- (6) -->
+    <bean class="org.springframework.validation.beanvalidation.MethodValidationPostProcessor">
+        <property name="validator" ref="validator" />
+    </bean>
+
+
 </beans>

@@ -52,6 +52,7 @@ public class AuthenticationEventSharedServiceImpl implements AuthenticationEvent
     public List<SuccessfulAuthentication> findLatestSuccessEvents(String username, int count) {
         SuccessfulAuthenticationExample example = new SuccessfulAuthenticationExample();
         example.setOrderByClause("authentication_timestamp DESC");
+        example.or().andUsernameEqualTo(username);
         RowBounds rowBounds = new RowBounds(0, count);
         return successAuthenticationRepository.selectByExampleWithRowbounds(example, rowBounds);
     }

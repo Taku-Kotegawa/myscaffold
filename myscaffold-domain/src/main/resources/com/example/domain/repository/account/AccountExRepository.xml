@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.domain.repository.account.AccountExRepository">
+    <resultMap id="BaseResultMap" type="com.example.domain.model.Account">
+        <id column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="first_name" jdbcType="VARCHAR" property="firstName"/>
+        <result column="last_name" jdbcType="VARCHAR" property="lastName"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+        <result column="profile" jdbcType="VARCHAR" property="profile"/>
+    </resultMap>
+
+    <sql id="Example_Where_Clause">
+        <where>
+            <if test="search != null and search.value != null">
+                AND ( 1 = 2
+                  <foreach collection="columns" item="column">
+                    <if test="column.searchable == true">
+                        OR ${column.dbname} LIKE '%' || #{search.value} || '%'
+                    </if>
+                  </foreach>
+                )
+            </if>
+            <foreach collection="columns" item="column">
+                <if test="column.searchable == true and column.search.value != null">
+                    AND ${column.dbname} LIKE '%' || #{column.search.value} || '%'
+                </if>
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="Base_Column_List">
+        username, password, first_name, last_name, email, url, profile
+    </sql>
+
+    <select id="countByExample" parameterType="com.example.domain.common.datatables.DataTablesInput"
+            resultType="java.lang.Long">
+        select count(*) from public.account
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+
+    <select id="selectByExampleWithRowbounds" parameterType="com.example.domain.common.datatables.DataTablesInput"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from public.account
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+
+    <select id="selectAllKey" resultType="java.lang.String">
+        select username from public.account;
+    </select>
+</mapper>
