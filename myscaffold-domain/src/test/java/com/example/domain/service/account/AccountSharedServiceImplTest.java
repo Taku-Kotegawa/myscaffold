@@ -173,7 +173,7 @@ class AccountSharedServiceImplTest {
         }
 
         @Test
-        @DisplayName("[異常系]指定したユーザID既に存在する場合は例外")
+        @DisplayName("[異常系]指定したユーザが既に存在する場合は例外")
         void test002() {
             // ---- 準備 ----
             insertIntoAccountRoles(createAccountRoles("user1"));
@@ -187,7 +187,6 @@ class AccountSharedServiceImplTest {
                     .isInstanceOf(BusinessException.class);
         }
     }
-
 
     @Nested
     @ContextConfiguration(locations = {"classpath:test-context.xml"})
@@ -217,7 +216,7 @@ class AccountSharedServiceImplTest {
 
             // ---- 実行 ----
             assertThatThrownBy(() -> {
-                AccountRoles actualAccountRoles = target.findOne("user1");
+                target.findOne("user1");
             })
                     // ---- 検証 ----
                     .isInstanceOf(ResourceNotFoundException.class);
