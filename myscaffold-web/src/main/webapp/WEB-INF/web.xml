@@ -141,6 +141,11 @@
         <location>/WEB-INF/views/common/error/invalidCharacterError.jsp</location>
     </error-page>
 
+    <error-page>
+        <exception-type>org.springframework.web.multipart.MultipartException</exception-type>
+        <location>/WEB-INF/views/common/error/fileUploadError.jsp</location>
+    </error-page>
+
     <session-config>
         <!-- 5000min -->
         <session-timeout>5000</session-timeout>
