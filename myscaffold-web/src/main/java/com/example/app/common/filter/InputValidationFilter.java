@@ -62,8 +62,10 @@ public class InputValidationFilter extends OncePerRequestFilter {
         Map<String, String[]> params = request.getParameterMap();
         for (Map.Entry<String, String[]> entry : params.entrySet()) {
             validate(entry.getKey(), prohibitedChars);
-            for (String value : entry.getValue()) {
-                validate(value, prohibitedChars);
+            if (request.getQueryString() != null && request.getQueryString().contains(entry.getKey())) {
+                for (String value : entry.getValue()) {
+                    validate(value, prohibitedChars);
+                }
             }
         }
     }
