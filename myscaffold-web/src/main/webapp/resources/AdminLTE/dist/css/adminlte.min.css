@@ -32832,6 +32832,10 @@ a.text-muted:hover {
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.125);
 }
 
+.was-validated .form-control:invalid, .form-control.is-invalid {
+  background-image: unset;
+}
+
 .custom-select {
   color: #595959;
   border: 1px solid #b8b8b8;
@@ -33050,6 +33054,10 @@ th.select-all {
   border-radius: 2px;
 }
 
+select.form-control.is-invalid + span.select2 .select2-selection {
+  border-color: #dc3545;
+}
+
 .input-group-text {
   padding-left: .5rem;
   padding-right: .5rem;
@@ -33088,18 +33096,27 @@ th.select-all {
 
 .k-dropdown-wrap.k-state-default {
   border-radius: 2px;
+  border-color: #b8b8b8;
+  border-top-color: #999;
 }
 
 .k-dropdown-wrap.k-state-default .k-input {
   transition: border linear 0.2s, box-shadow linear 0.2s;
   color: #595959;
   background: #fcfcfa;
-  border-top-color: #999;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.125);
 }
 
 .k-state-default > .k-select {
   border-left: solid 1px #c5c5c5 !important;
+}
+
+.k-list-container {
+  background-color: #fff;
+}
+
+.is-invalid .k-dropdown-wrap.k-state-default {
+  border-color: #dc3545;
 }
 
 .dt-buttons .dropdown-toggle::after {
@@ -33116,5 +33133,17 @@ table.dataTable.fixedHeader-floating {
 
 table.dataTable th {
   white-space: nowrap;
+}
+
+:focus {
+  outline-width: 0 !important;
+}
+
+.invalid-feedback {
+  display: unset;
+}
+
+.form-check-inline span input[type='radio'] {
+  vertical-align: text-top;
 }
 /*# sourceMappingURL=adminlte.min.css.map */

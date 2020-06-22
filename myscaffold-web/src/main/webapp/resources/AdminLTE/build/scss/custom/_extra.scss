@@ -11,3 +11,19 @@
 
 @import 'kendoui-combobox';
 @import 'datatables';
+
+:focus {
+  outline-width: 0 !important;
+}
+
+.invalid-feedback {
+  display: unset;
+}
+
+.form-check-inline {
+  span {
+    input[type='radio'] {
+      vertical-align: text-top;
+    }
+  }
+}
