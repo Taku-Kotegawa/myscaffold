@@ -28,46 +28,57 @@ public class GuruguruForm {
     /**
      * テキストフィールド002(数値・整数)
      */
+    @NotNull
     private Integer textfield002;
 
     /**
      * テキストフィールド002(数値・小数あり)
      */
+    @NotNull
     private Float textfield003;
 
     /**
      * テキストフィールド(真偽値)
      */
+    @NotNull
     private Boolean textfield004;
 
     /**
      * テキストフィールド(文字列・複数の値)
      */
+    @NotNull
+    @NotEmpty
     private List<String> textfield005;
 
     /**
      * ラジオボタン
      */
+    @NotNull
     private Boolean radio001;
 
     /**
      * ラジオボタン2
      */
+    @NotNull
     private String radio002;
 
     /**
      * チェックボックス1
      */
+    @NotNull
     private String checkbox001;
 
     /**
      * チェックボックス2
      */
+    @NotNull
+    @NotEmpty
     private List<String> checkbox002;
 
     /**
      * テキストエリア1
      */
+    @NotNull
     private String textarea001;
 
     /**
@@ -120,6 +131,7 @@ public class GuruguruForm {
      * コンボボックス2(複数の値)
      */
     @NotNull
+    @NotEmpty
     private List<String> combobox002;
 
     /**
@@ -133,6 +145,13 @@ public class GuruguruForm {
      */
     @NotNull
     private String combobox004;
+
+    /**
+     * コンボボックス5
+     */
+    @NotNull
+    private String combobox005;
+
 
     /**
      * ファイル

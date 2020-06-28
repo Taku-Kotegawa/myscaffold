@@ -4,6 +4,22 @@
   table td:nth-child(2) {
     word-break: break-all;
   }
+
+  .dropdown-menu.combobox {
+    overflow: auto;
+    max-height: 250px;
+    min-width: 100%;
+    padding: 0;
+  }
+
+  .dropdown-menu.combobox li.autocomplete {
+    padding: .2rem .4rem;
+    min-height: 1.5rem;
+  }
+
+  .dropdown-menu.combobox li.autocomplete:hover {
+    background-color: lightgray;
+  }
 </style>
 <section class="content">
   <div class="container">
@@ -96,7 +112,9 @@
                 <form:label path="radio001" for="radio0011">はい</form:label>
                 <form:radiobutton path="radio001" cssClass="" cssErrorClass="is-invalid" value="false" />
                 <form:label path="radio001" for="radio0012">いいえ</form:label>
-                <form:errors path="radio001" cssClass="invalid-feedback" />
+              </div>
+              <div>
+              <form:errors path="radio001" cssClass="invalid-feedback" />
               </div>
             </td>
             <td>
@@ -112,8 +130,8 @@
               <div class="form-check-inline">
                 <form:radiobuttons path="radio002" cssClass="" cssErrorClass="is-invalid" items="${radio002Options}"
                   itemLabel="label" itemValue="value" />
-                <form:errors path="radio002" cssClass="invalid-feedback" />
               </div>
+              <form:errors path="radio002" cssClass="invalid-feedback" />
             </td>
             <td>
               ${f:h(guruguruForm.radio002)}
@@ -128,8 +146,8 @@
               <div class="form-check-inline">
                 <form:checkbox path="checkbox001" cssClass="" cssErrorClass="is-invalid" value="yes" />
                 <form:label path="checkbox001" for="checkbox0011">利用規約に合意する</form:label>
-                <form:errors path="checkbox001" cssClass="invalid-feedback" />
               </div>
+              <form:errors path="checkbox001" cssClass="invalid-feedback" />
             </td>
             <td>
               ${f:h(guruguruForm.checkbox001)}
@@ -144,8 +162,8 @@
               <div class="form-check-inline">
                 <form:checkboxes path="checkbox002" cssClass="" cssErrorClass="is-invalid" items="${radio002Options}"
                   itemLabel="label" itemValue="value" />
-                <form:errors path="checkbox002" cssClass="invalid-feedback" />
               </div>
+              <form:errors path="checkbox002" cssClass="invalid-feedback" />
             </td>
             <td>
               ${f:h(guruguruForm.checkbox002)}
@@ -312,6 +330,57 @@
           </tr>
 
           <tr>
+            <td>
+              コンボボックス
+            </td>
+            <td>
+              <form:label path="combobox004">コンボボックス(datalist)</form:label>
+              <div>
+                <form:input path="combobox004" cssClass="form-control" cssErrorClass="form-control is-invalid"
+                  list="keywords" />
+                <datalist id="keywords">
+                  <option value="ウィキペディア">
+                  <option value="ウィルス対策">
+                  <option value="ウィンドウズ">
+                </datalist>
+              </div>
+              <form:errors path="combobox004" cssClass="invalid-feedback" />
+            </td>
+            <td>
+              ${f:h(guruguruForm.combobox004)}
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              コンボボックス
+            </td>
+            <td>
+              <form:label path="combobox005">コンボボックス(Bootstrap-toggle & Filter)</form:label>
+              <!-- @See https://www.w3schools.com/bootstrap/bootstrap_filters.asp -->
+              <div class="dropdown input-group">
+                <form:input path="combobox005" cssClass="form-control" cssErrorClass="form-control is-invalid" />
+                <div class="input-group-append" data-toggle="dropdown">
+                  <div class="input-group-text"><i class="fas fa-angle-down"></i></div>
+                </div>
+                <ul class="dropdown-menu dropdown-menu-right combobox" aria-labelledby="dropdownMenuButton">
+                  <input class="form-control" id="myInput" type="text" placeholder="Filter..">
+                  <c:forEach var="item" items="${selectoptionsblank}" varStatus="status">
+                    <li class="autocomplete" data-autocomplete="${item.label}" data-target="combobox005">${item.label}
+                    </li>
+                  </c:forEach>
+                </ul>
+              </div>
+              <form:errors path="combobox005" cssClass="invalid-feedback" />
+            </td>
+            <td>
+              ${f:h(guruguruForm.combobox005)}
+            </td>
+          </tr>
+
+
+
+          <tr>
             <td>ファイル
             </td>
             <td>
@@ -343,6 +412,9 @@
         <a href="" class="btn btn-button mr-2">再描画</a>
         <button type="submit" class="btn btn-button">送信</button>
       </div>
+
+
+
 
     </form:form>
 
@@ -417,6 +489,19 @@
 
     $(".kendoComboBox").kendoComboBox();
 
+    $("#myInput").on("keyup", function () {
+      var value = $(this).val().toLowerCase();
+      $(".dropdown-menu li").filter(function () {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+    });
 
+  });
+
+
+  $(document).on('ontouched click', '.autocomplete', function () {
+    var text = $(this).data('autocomplete');
+    var target = $(this).data('target');
+    $('input[name="' + target + '"]').val(text);
   });
 </script>

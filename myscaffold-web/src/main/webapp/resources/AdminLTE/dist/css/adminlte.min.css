@@ -33059,6 +33059,7 @@ select.form-control.is-invalid + span.select2 .select2-selection {
 }
 
 .input-group-text {
+  padding-bottom: 0;
   padding-left: .5rem;
   padding-right: .5rem;
   border: 1px solid #b8b8b8;

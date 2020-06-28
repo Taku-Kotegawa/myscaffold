@@ -42,7 +42,8 @@ public class UnlockController {
 
     @PostMapping
     public String unlock(@Validated UnlockForm form,
-                         BindingResult bindingResult, Model model,
+                         BindingResult bindingResult,
+                         Model model,
                          RedirectAttributes attributes) {
         if (bindingResult.hasErrors()) {
             return showForm(form);

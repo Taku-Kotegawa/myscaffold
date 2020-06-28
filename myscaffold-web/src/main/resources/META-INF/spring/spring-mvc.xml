@@ -43,7 +43,9 @@
             <mvc:mapping path="/**" />
             <mvc:exclude-mapping path="/resources/**" />
             <bean
-                class="org.terasoluna.gfw.web.token.transaction.TransactionTokenInterceptor" />
+                class="org.terasoluna.gfw.web.token.transaction.TransactionTokenInterceptor">
+                    <constructor-arg value="1"/>
+            </bean>
         </mvc:interceptor>
         <mvc:interceptor>
             <mvc:mapping path="/**" />
@@ -88,9 +90,9 @@
         <constructor-arg>
             <util:list>
                 <bean
-                    class="org.springframework.security.web.servlet.support.csrf.CsrfRequestDataValueProcessor" />
-                <bean
                     class="org.terasoluna.gfw.web.token.transaction.TransactionTokenRequestDataValueProcessor" />
+                <bean
+                    class="org.springframework.security.web.servlet.support.csrf.CsrfRequestDataValueProcessor" />
             </util:list>
         </constructor-arg>
     </bean>
