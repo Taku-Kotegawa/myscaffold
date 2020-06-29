@@ -174,7 +174,8 @@
             <td>
               <div>
                 <form:label path="textarea001">テキストエリア</form:label>
-                <form:textarea path="textarea001" cssClass="form-control" cssErrorClass="form-control is-invalid" />
+                <form:textarea path="textarea001" cssClass="form-control" cssErrorClass="form-control is-invalid"
+                  rows="5" />
                 <form:errors path="textarea001" cssClass="invalid-feedback" />
               </div>
             </td>
@@ -269,9 +270,6 @@
               ${f:h(guruguruForm.orderStatus)}
             </td>
           </tr>
-
-
-
 
           <tr>
             <td>セレクト</td>
@@ -441,10 +439,7 @@
         </tbody>
       </table>
 
-      <div class="row py-4">
-        <a href="" class="btn btn-button mr-2">再描画</a>
-        <button type="submit" class="btn btn-button">送信</button>
-      </div>
+
 
 
 
@@ -502,6 +497,18 @@
     <!-- ここより上にメインコンテンツを記入 -->
   </div>
 </section>
+
+<footer class="main-footer">
+  <div class="container">
+    <div class="float-right">
+      <a href="" class="btn btn-button mr-2">再描画</a>
+      <button type="submit" class="btn btn-button" form="guruguruForm">送信</button>
+    </div>
+    <div>
+      <a href="#" class="btn-button">BackToTop</a>
+    </div>
+  </div>
+</footer>
 
 <script>
   $(function () {
