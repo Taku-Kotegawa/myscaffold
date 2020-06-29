@@ -41,8 +41,8 @@
         <thead class="thead-inverse">
           <tr>
             <th>UI部品名</th>
-            <th>フォーム</th>
-            <th>表示</th>
+            <th width="50%">フォーム</th>
+            <th width="30%">表示</th>
           </tr>
         </thead>
         <tbody>
@@ -114,7 +114,7 @@
                 <form:label path="radio001" for="radio0012">いいえ</form:label>
               </div>
               <div>
-              <form:errors path="radio001" cssClass="invalid-feedback" />
+                <form:errors path="radio001" cssClass="invalid-feedback" />
               </div>
             </td>
             <td>
@@ -179,7 +179,7 @@
               </div>
             </td>
             <td>
-              ${f:h(guruguruForm.textarea001)}
+              ${f:br(f:h(guruguruForm.textarea001))}
             </td>
           </tr>
 
@@ -239,6 +239,39 @@
               ${f:h(guruguruForm.select001)}
             </td>
           </tr>
+
+          <tr>
+            <td>セレクト</td>
+            <td>
+              <form:label path="select005">セレクト(単一の値)</form:label>
+              <form:select path="select005" cssClass="form-control" cssErrorClass="form-control is-invalid">
+                <form:option value="" label=" - Select -" />
+                <form:options items="${selectoptions}" itemLabel="label" itemValue="value" />
+              </form:select>
+              <form:errors path="select005" cssClass="invalid-feedback" />
+            </td>
+            <td>
+              ${f:h(guruguruForm.select005)}
+            </td>
+          </tr>
+
+          <tr>
+            <td>セレクト</td>
+            <td>
+              <form:label path="orderStatus">セレクト(単一の値・CodeList)</form:label>
+              <form:select path="orderStatus" cssClass="form-control" cssErrorClass="form-control is-invalid">
+                <form:option value="" label="--Select--" />
+                <form:options items="${CL_ORDERSTATUS}" />
+              </form:select>
+              <form:errors path="orderStatus" cssClass="invalid-feedback" />
+            </td>
+            <td>
+              ${f:h(guruguruForm.orderStatus)}
+            </td>
+          </tr>
+
+
+
 
           <tr>
             <td>セレクト</td>

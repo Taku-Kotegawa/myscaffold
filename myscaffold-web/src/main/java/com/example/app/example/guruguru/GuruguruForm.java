@@ -102,6 +102,18 @@ public class GuruguruForm {
     private String select001;
 
     /**
+     * セレクト(単一の値)
+     */
+    @NotNull
+    private String select005;
+
+    /**
+     * セレクト(CodeList)
+     */
+    @NotNull
+    private String orderStatus;
+
+    /**
      * セレクト(複数の値)
      */
     @NotNull

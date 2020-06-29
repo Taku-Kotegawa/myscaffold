@@ -23,4 +23,14 @@
     </bean>
     -->
 
+    <bean id="CL_ORDERSTATUS" class="org.terasoluna.gfw.common.codelist.SimpleMapCodeList">
+        <property name="map">
+            <map>
+                <entry key="1" value="Received" />
+                <entry key="3" value="Cancelled" />
+                <entry key="2" value="Sent" />
+            </map>
+        </property>
+    </bean>
+
 </beans>
