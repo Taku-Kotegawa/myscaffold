@@ -53,10 +53,11 @@
         <form:input path="text004" cssClass="form-control col-10" disabled="${text004__disabled}" />
       </div>
 
-      <input type="submit" value="2へ進む" class="btn btn-button" /> <!-- input type=submit のデフォルトのボタン名は「送信」となる -->
-      <button type="submit" name="a" class="btn btn-button">3へ進む</button>
-      <button type="submit" name="b" class="btn btn-button">4へ進む</button>
-      <button type="submit" name="c" class="btn btn-button">リダイレクトして1に戻る</button>
+      <button type="submit" name="1" class="btn btn-button">1へ進む</button>
+      <button type="submit" name="2" class="btn btn-button">2へ進む</button>
+      <button type="submit" name="3" class="btn btn-button">3へ進む</button>
+      <button type="submit" name="4" class="btn btn-button">4へ進む</button>
+      <button type="submit" name="5" class="btn btn-button">リダイレクトして1に戻る</button>
 
     </form:form>
 

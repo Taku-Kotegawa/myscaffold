@@ -1,6 +1,8 @@
 package com.example.app.example.transactionToken;
 
+import com.github.dozermapper.core.Mapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -9,11 +11,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.terasoluna.gfw.web.token.transaction.TransactionTokenCheck;
 import org.terasoluna.gfw.web.token.transaction.TransactionTokenType;
-
-import javax.servlet.http.HttpServletRequest;
 
 @Slf4j
 @Controller
@@ -22,36 +23,49 @@ import javax.servlet.http.HttpServletRequest;
 @TransactionTokenCheck("transactiontoken")
 public class TransactionTokenController {
 
+    @Autowired
+    Mapper beanMapper;
+
     @GetMapping()
     @TransactionTokenCheck(type = TransactionTokenType.BEGIN)
-    public String createForm(TransactionTokenForm form, Model model, HttpServletRequest request) {
+    public String createForm(TransactionTokenForm form, Model model) {
         form.setScreenId(1);
         return "example/transactiontokenform";
     }
 
-    @PostMapping()
+    @PostMapping(params = "1")
     @TransactionTokenCheck
-    public String create(@Validated TransactionTokenForm form, BindingResult bindingResult, Model model) {
+    public String create1(@Validated TransactionTokenForm form, BindingResult bindingResult, Model model) {
+        form.setScreenId(1);
+        return "example/transactiontokenform";
+    }
+
+    @PostMapping(params = "2")
+    @TransactionTokenCheck
+    public String create2(@Validated TransactionTokenForm form, BindingResult bindingResult, Model model) {
         form.setScreenId(2);
         return "example/transactiontokenform";
     }
 
-    @PostMapping(params = "a")
+    @PostMapping(params = "3")
     @TransactionTokenCheck
-    public String createA(@Validated TransactionTokenForm form, BindingResult bindingResult, Model model) {
+    public String create3(@Validated TransactionTokenForm form, BindingResult bindingResult, Model model) {
         form.setScreenId(3);
         return "example/transactiontokenform";
     }
 
-    @PostMapping(params = "b")
+    @PostMapping(params = "4")
     @TransactionTokenCheck
-    public String createb(@Validated TransactionTokenForm form, BindingResult bindingResult, Model model, RedirectAttributes attributes) {
+    public String create4(@Validated TransactionTokenForm form, BindingResult bindingResult, Model model) {
         form.setScreenId(4);
         return "example/transactiontokenform";
     }
 
-    @PostMapping(params = "c")
-    public String createc(@Validated TransactionTokenForm form, BindingResult bindingResult, Model model, RedirectAttributes attributes) {
+    @PostMapping(params = "5")
+    @TransactionTokenCheck
+    public String complete(@Validated TransactionTokenForm form, BindingResult bindingResult, Model model, RedirectAttributes attributes, SessionStatus sessionStatus) {
+        sessionStatus.setComplete();
         return "redirect:/transactiontoken";
     }
+
 }
