@@ -80,8 +80,9 @@
 
         var table = $('#acountlist').DataTable({
 
-          // 'serverSide': false,
-          // 'ajax': 'list/json2',
+//           'serverSide': false,
+//           'ajax': 'list/json2',
+//            "deferRender": false,
 
           // 一覧に表示する項目とJSONの項目にマッピング
           'columns': [
@@ -133,7 +134,7 @@
     var storageKey = "DataTables_acountlist_/myscaffold-web/accounts/list";
     var url = '/myscaffold-web/accounts/list/allkeyjson';
     var stateSaveData = JSON.parse(localStorage.getItem(storageKey));
-    $.getJSON(url, (data) => {
+    $.getJSON(url, function(data){
       data.forEach(function (value) {
         stateSaveData.checkboxes[0][value] = 1;
       });

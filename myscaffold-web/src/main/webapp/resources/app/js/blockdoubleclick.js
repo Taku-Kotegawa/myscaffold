@@ -8,25 +8,40 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // <form>のsubmitイベントに処理追加
   var forms = document.querySelectorAll('form');
-  forms.forEach(form => {
+//  forms.forEach(form => {
+//    form.addEventListener('submit', setClicked);
+//  });
+
+  Array.prototype.forEach.call(forms, function(form) {
     form.addEventListener('submit', setClicked);
   });
 
+
   // submitタイプの要素のclickイベントに処理追加
   var submits = document.querySelectorAll('[type="submit"]')
-  submits.forEach(e => {
+//  submits.forEach(e => {
+//    e.addEventListener('click', blockDoubleDlick);
+//  })
+  Array.prototype.forEach.call(submits, function(e){
     e.addEventListener('click', blockDoubleDlick);
   })
 
+
   // アンカーのclickイベントに処理追加
   var anchors = document.querySelectorAll('a');
-  anchors.forEach(e => {
+//  anchors.forEach(e => {
+//    e.addEventListener('click', blockDoubleDlick);
+//  })
+  Array.prototype.forEach.call(anchors, function(e){
     e.addEventListener('click', blockDoubleDlick);
   })
 
   // class="submit-confirm" で確認ダイアログ表示
   var submits = document.querySelectorAll('.submit-confirm')
-  submits.forEach(e => {
+//  submits.forEach(e => {
+//    e.addEventListener('click', submitConfirm);
+//  })
+  Array.prototype.forEach.call(submits, function(e){
     e.addEventListener('click', submitConfirm);
   })
 
@@ -40,12 +55,18 @@ document.addEventListener('DOMContentLoaded', function () {
 function setClicked(event) {
 
   var submits = document.querySelectorAll('[type="submit"]')
-  submits.forEach(e => {
+//  submits.forEach(e => {
+//    e.dataset.clicked = 'clicked';
+//  })
+  Array.prototype.forEach.call(submits, function(e){
     e.dataset.clicked = 'clicked';
   })
 
   var anchors = document.querySelectorAll('a');
-  anchors.forEach(e => {
+//  anchors.forEach(e => {
+//    e.dataset.clicked = 'clicked';
+//  })
+  Array.prototype.forEach.call(anchors, function(e){
     e.dataset.clicked = 'clicked';
   })
 
@@ -64,11 +85,17 @@ function setClicked(event) {
  * data-clicked属性の解除
  */
 function unsetClicked() {
-  document.querySelectorAll('[type="submit"]').forEach(e => {
+//  document.querySelectorAll('[type="submit"]').forEach(e => {
+//    e.dataset.clicked = '';
+//  })
+    Array.prototype.forEach.call(document.querySelectorAll('[type="submit"]'), function(e){
     e.dataset.clicked = '';
   })
 
-  document.querySelectorAll('a').forEach(e => {
+//  document.querySelectorAll('a').forEach(e => {
+//    e.dataset.clicked = '';
+//  })
+  Array.prototype.forEach.call(document.querySelectorAll('a'), function(e){
     e.dataset.clicked = '';
   })
 
