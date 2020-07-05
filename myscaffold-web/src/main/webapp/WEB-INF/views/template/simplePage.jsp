@@ -22,13 +22,3 @@
   </div>
 </section>
 
-
-      <div class="form-group row">
-        <form:label path="username" cssClass="col-4 col-form-label">
-          ユーザ名 *
-        </form:label>
-        <div class="col-10 form-control">
-          ${f:h(accountCreateForm.username)}
-          <form:hidden path="username" />
-        </div>
-      </div>

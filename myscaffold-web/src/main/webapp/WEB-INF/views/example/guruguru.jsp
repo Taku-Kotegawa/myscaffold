@@ -1,5 +1,11 @@
 <%@ page import="java.util.Enumeration"%>
 
+<!-- Kendo ui core & combobx ------------------------------------------------------------------------------------------>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/plugins/kendoui.core/styles/kendo.common.min.css" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/plugins/kendoui.core/styles/kendo.default.min.css" />
+<script src="${pageContext.request.contextPath}/resources/plugins/kendoui.core/js/kendo.ui.core.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plugins/kendoui.core/js/kendo.combobox.min.js"></script>
+
 <style>
   table td:nth-child(2) {
     word-break: break-all;

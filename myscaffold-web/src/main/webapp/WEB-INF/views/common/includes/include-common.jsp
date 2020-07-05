@@ -4,7 +4,6 @@
 <!-- ダブルクリック防止 ------------------------------------------------------------------------------------------------->
 <script src="${pageContext.request.contextPath}/resources/app/js/blockdoubleclick.js"></script>
 
-
 <!-- Bootstrap 4 ------------------------------------------------------------------------------------------------------>
 <script src="${pageContext.request.contextPath}/resources/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js">
 </script>
@@ -26,12 +25,6 @@
 <!-- Font Awesome Icons ----------------------------------------------------------------------------------------------->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/AdminLTE/plugins/fontawesome-free/css/all.min.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/AdminLTE/plugins/fontawesome-free/css/v4-shims.min.css">
-
-<!-- Kendo ui core & combobx ------------------------------------------------------------------------------------------>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/plugins/kendoui.core/styles/kendo.common.min.css" />
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/plugins/kendoui.core/styles/kendo.default.min.css" />
-<script src="${pageContext.request.contextPath}/resources/plugins/kendoui.core/js/kendo.ui.core.min.js"></script>
-<script src="${pageContext.request.contextPath}/resources/plugins/kendoui.core/js/kendo.combobox.min.js"></script>
 
 <!-- Admin LTE & Custom Style ----------------------------------------------------------------------------------------->
 <!-- (一番最後) -->
