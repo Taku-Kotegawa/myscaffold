@@ -29,6 +29,8 @@
         <!-- /** は一番下 -->
         <sec:intercept-url pattern="/**" access="isAuthenticated()"/>
 
+        <!-- ロールの階層化 -->
+        <sec:expression-handler ref="webExpressionHandler"/>
     </sec:http>
 
     <sec:authentication-manager>
@@ -74,12 +76,35 @@
     <bean id="userIdMDCPutFilter" class="org.terasoluna.gfw.security.web.logging.UserIdMDCPutFilter">
     </bean>
 
-
     <bean id="logoutSuccessHandler"
           class="com.example.app.common.security.CacheClearLogoutSuccessHandler">
         <constructor-arg value="/"/>
     </bean>
 
-    <sec:global-method-security pre-post-annotations="enabled"/>
+
+    <bean id="roleHierarchy"
+          class="org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl"> <!-- (1) -->
+        <property name="hierarchy"> <!-- (2) -->
+            <value>
+                ROLE_ADMIN > ROLE_STAFF
+                ROLE_STAFF > ROLE_USER
+            </value>
+        </property>
+    </bean>
+
+    <bean id="webExpressionHandler"
+          class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler">
+        <property name="roleHierarchy" ref="roleHierarchy"/>  <!-- (2) -->
+    </bean>
+
+    <bean id="methodExpressionHandler"
+          class="org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler"> <!-- (1) -->
+        <property name="roleHierarchy" ref="roleHierarchy"/> <!-- (2) -->
+    </bean>
+
+    <sec:global-method-security pre-post-annotations="enabled">
+        <sec:expression-handler ref="methodExpressionHandler"/> <!-- (3) -->
+    </sec:global-method-security>
+
 
 </beans>

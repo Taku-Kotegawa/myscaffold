@@ -779,5 +779,35 @@
 <script src="../../dist/js/adminlte.min.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="../../dist/js/demo.js"></script>
+
+<script src="../../../plugins/eModal/dist/eModal.min.js"></script>
+<script>
+
+  $(function () {
+
+
+var options = {
+message: 'test message',
+title: 'Header title',
+size: 'lg',
+subtitle: 'smaller text header',
+useBin: true
+};
+eModal.alert(options);
+
+
+
+
+
+
+    // eModal.ajax('http://localhost:8080/myscaffold-web/common/dialog/test', 'Jobs - Form apply')
+    //   .then(ajaxOnLoadCallback);
+
+
+  });
+
+
+</script>
+
 </body>
 </html>

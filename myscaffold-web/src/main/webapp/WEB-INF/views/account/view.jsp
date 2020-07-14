@@ -61,3 +61,26 @@
     <!-- ここより上にメインコンテンツを記入 -->
   </div>
 </section>
+
+<script>
+  $(function () {
+
+    var options = {
+    message: 'test message',
+    title: 'Header title',
+    size: 'lg',
+    subtitle: 'smaller text header',
+                    buttons: [
+                    { text: '閉じる', close: true, style: 'danger' },
+                    { text: 'New content', close: false, style: 'success' }
+                    ],
+    };
+    eModal.alert(options);
+
+    eModal.ajax('http://localhost:8080/myscaffold-web/common/dialog/test', 'Jobs - Form apply')
+      .then(ajaxOnLoadCallback);
+
+  });
+
+
+</script>

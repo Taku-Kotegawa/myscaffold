@@ -1039,20 +1039,20 @@
                     <div class="col-sm-6">
                       <!-- checkbox -->
                       <div class="form-group">
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox">
-                          <label class="form-check-label">Checkbox</label>
-                        </div>
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox" checked>
-                          <label class="form-check-label">Checkbox checked</label>
-                        </div>
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox" disabled>
-                          <label class="form-check-label">Checkbox disabled</label>
-                        </div>
+                          <div class="form-check">
+                              <input class="form-check-input" type="checkbox">
+                              <label class="form-check-label">Checkbox</label>
+                          </div>
+                          <div class="form-check">
+                              <input checked class="form-check-input" type="checkbox">
+                              <label class="form-check-label">Checkbox checked</label>
+                          </div>
+                          <div class="form-check">
+                              <input class="form-check-input" disabled type="checkbox">
+                              <label class="form-check-label">Checkbox disabled</label>
+                          </div>
                       </div>
-                    </div> 
+                    </div>
                     <div class="col-sm-6">
                       <!-- radio -->
                       <div class="form-group">
@@ -1143,21 +1143,24 @@
                   <div class="row">
                     <div class="col-sm-6">
                       <!-- checkbox -->
-                      <div class="form-group">
-                        <div class="custom-control custom-checkbox">
-                          <input class="custom-control-input" type="checkbox" id="customCheckbox1" value="option1">
-                          <label for="customCheckbox1" class="custom-control-label">Custom Checkbox</label>
+                        <div class="form-group">
+                            <div class="custom-control custom-checkbox">
+                                <input class="custom-control-input" type="checkbox" id="customCheckbox1"
+                                       value="option1">
+                                <label for="customCheckbox1" class="custom-control-label">Custom Checkbox</label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input checked class="custom-control-input" id="customCheckbox2" type="checkbox">
+                                <label class="custom-control-label" for="customCheckbox2">Custom Checkbox
+                                    checked</label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input class="custom-control-input" disabled id="customCheckbox3" type="checkbox">
+                                <label class="custom-control-label" for="customCheckbox3">Custom Checkbox
+                                    disabled</label>
+                            </div>
                         </div>
-                        <div class="custom-control custom-checkbox">
-                          <input class="custom-control-input" type="checkbox" id="customCheckbox2" checked>
-                          <label for="customCheckbox2" class="custom-control-label">Custom Checkbox checked</label>
-                        </div>
-                        <div class="custom-control custom-checkbox">
-                          <input class="custom-control-input" type="checkbox" id="customCheckbox3" disabled>
-                          <label for="customCheckbox3" class="custom-control-label">Custom Checkbox disabled</label>
-                        </div>
-                      </div>
-                    </div> 
+                    </div>
                     <div class="col-sm-6">
                       <!-- radio -->
                       <div class="form-group">
@@ -1317,6 +1320,17 @@
 $(document).ready(function () {
   bsCustomFileInput.init();
 });
+
+
+</script>
+<script src="../../../plugins/eModal/dist/eModal.min.js"></script>
+<script>
+  $(function () {
+    eModal.ajax('http://localhost:8080/myscaffold-web/', 'Jobs - Form apply')
+      .then(ajaxOnLoadCallback);
+  });
+
+
 </script>
 </body>
 </html>

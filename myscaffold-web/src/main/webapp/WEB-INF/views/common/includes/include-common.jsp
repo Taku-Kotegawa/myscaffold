@@ -12,6 +12,9 @@
 <script src="${pageContext.request.contextPath}/resources/AdminLTE/plugins/moment/moment.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/AdminLTE/plugins/moment/locale/ja.js"></script>
 
+<!-- eModal ----------------------------------------------------------------------------------------------------------->
+<script src="${pageContext.request.contextPath}/resources/plugins/eModal/dist/eModal.min.js"></script>
+
 <!-- Select2 ---------------------------------------------------------------------------------------------------------->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/AdminLTE/plugins/select2/css/select2.min.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/AdminLTE/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
