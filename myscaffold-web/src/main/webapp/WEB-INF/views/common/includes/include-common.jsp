@@ -20,7 +20,7 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/AdminLTE/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
 <script src="${pageContext.request.contextPath}/resources/AdminLTE/plugins/select2/js/select2.full.min.js"></script>
 
-<!-- Tempusdominus Bbootstrap 4 --------------------------------------------------------------------------------------->
+<!-- Tempusdominus Bootstrap 4 --------------------------------------------------------------------------------------->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/AdminLTE/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
 <script src="${pageContext.request.contextPath}/resources/AdminLTE/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/app/js/datetimepicker-default.js"></script>
