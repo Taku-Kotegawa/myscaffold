@@ -3,9 +3,14 @@ package com.example.domain.example;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.beans.Introspector;
+import java.lang.reflect.Array;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -341,6 +346,84 @@ class LombokTestServiceTest {
         LombokBuilderEntity lombokBuilderEntity = create("aaa");
         System.out.println(lombokBuilderEntity.toString());
     }
+
+    public static String getSignature(Method m) {
+        String sig;
+        try {
+            Field gSig = Method.class.getDeclaredField("signature");
+            gSig.setAccessible(true);
+            sig = (String) gSig.get(m);
+            if (sig != null) return sig;
+        } catch (IllegalAccessException | NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+
+        StringBuilder sb = new StringBuilder("(");
+        for (Class<?> c : m.getParameterTypes())
+            sb.append((sig = Array.newInstance(c, 0).toString()), 1, sig.indexOf('@'));
+        return sb.append(')')
+                .append(
+                        m.getReturnType() == void.class ? "V" :
+                                (sig = Array.newInstance(m.getReturnType(), 0).toString()).substring(1, sig.indexOf('@'))
+                )
+                .toString();
+    }
+
+    @Test
+    @DisplayName("016_リフレクションの検証: ")
+    void test016() {
+        Map<String, Boolean> filedAuthMap = initFiledAuthMap(getFileds(LombokEntity.class, ""));
+
+        System.out.println(filedAuthMap);
+
+    }
+
+    private Map<String, Boolean> initFiledAuthMap(List<String> fieldNames) {
+
+        String[] attributes = {"disabed", "readonly", "hidden"};
+        Map<String, Boolean> fMap = new LinkedHashMap<>();
+
+        for (String fieldName : fieldNames) {
+            for (String attribute : attributes) {
+                fMap.put(fieldName + "__" + attribute, new Boolean(false));
+            }
+        }
+        return fMap;
+    }
+
+    private List<String> getFileds(Class clazz) {
+        return getFileds(clazz, "");
+    }
+
+    private List<String> getFileds(Class clazz, String parentClassName) {
+
+        String prefix = "";
+        if (parentClassName != null && !parentClassName.isEmpty()) {
+            prefix = parentClassName + "-";
+        }
+
+        Method[] methods = clazz.getMethods();
+        List<String> fieldNames = new ArrayList<>();
+        for (Method m : methods) {
+            if (m.getName().startsWith("set")) {
+                Class fieldClass = m.getParameterTypes()[0];
+                String fieldName = Introspector.decapitalize(m.getName().substring(3));
+
+                if ("java.lang.String".equals(fieldClass.getName())
+                        || "java.util.List".equals(fieldClass.getName())
+                        || "java.util.Map".equals(fieldClass.getName())) {
+                    // 何もしない
+
+                } else {
+                    fieldNames.addAll(getFileds(fieldClass, fieldName));
+                }
+
+                fieldNames.add(prefix + fieldName);
+            }
+        }
+        return fieldNames;
+    }
+
 
     private void setValue(LombokChildEntity entity, String value) {
         entity.setField201(value);
