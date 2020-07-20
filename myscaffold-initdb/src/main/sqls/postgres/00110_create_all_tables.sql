@@ -148,7 +148,8 @@ create table if not exists sample1 (
     timestamp_data            timestamp,
     timestamp_zone_data       timestamp(3) with time zone,
     boolean_boolean           boolean,
-    binary_binary             bytea
+    binary_binary             bytea,
+    constraint pk_tbl_sample1 primary key (integer_number)
 );
 
 COMMENT ON TABLE sample1 IS 'サンプル１';
