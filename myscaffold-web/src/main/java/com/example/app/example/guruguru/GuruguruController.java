@@ -22,7 +22,7 @@ import java.util.Map;
 public class GuruguruController {
 
     @Autowired
-    private RequestMappingHandlerMapping requestMappingHandlerMapping;
+    RequestMappingHandlerMapping requestMappingHandlerMapping;
 
     @ModelAttribute
     public GuruguruForm setUp() {

@@ -8,6 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -54,10 +55,10 @@ public class AuthenticationTestController {
         return "example/authenticationtest";
     }
 
-//    @ModelAttribute
-//    public AuthenticationTestForm setUp() {
-//        return new AuthenticationTestForm();
-//    }
+    @ModelAttribute
+    public AuthenticationTestForm setUp() {
+        return new AuthenticationTestForm();
+    }
 
     @RequestMapping("test5")
     public String test5(AuthenticationTestForm form, Model model) {
