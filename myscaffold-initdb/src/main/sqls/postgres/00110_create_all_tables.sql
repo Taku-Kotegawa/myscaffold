@@ -170,3 +170,86 @@ COMMENT ON COLUMN sample1.timestamp_data IS '日付・日時１';
 COMMENT ON COLUMN sample1.timestamp_zone_data IS '日付・日時２';
 COMMENT ON COLUMN sample1.boolean_boolean IS '真偽値１';
 COMMENT ON COLUMN sample1.binary_binary IS 'バイナリ';
+
+create table if not exists staff (
+    id              bigserial not null,
+    version         bigint not null,
+    status          integer not null,
+    created_at      timestamp not null,
+    created_by      varchar not null,
+    updated_at      timestamp not null,
+    updated_by      varchar not null,
+    staff_no        varchar not null,
+    name            varchar,
+    birthday        date,
+    constraint pk_tbl_staff primary key (id),
+    constraint uk_tbl_staff unique (staff_no)
+);
+comment on table  staff            is 'スタッフ';
+comment on column staff.id         is 'ID:データの主キー';
+comment on column staff.version    is 'バージョン(楽観的排他用)';
+comment on column staff.status     is '公開区分:0=編集中,1=公開,2=非公開(論理削除)';
+comment on column staff.created_at is '登録日時'; 
+comment on column staff.created_by is '登録者'; 
+comment on column staff.updated_at is '更新日時'; 
+comment on column staff.updated_by is '更新者';
+comment on column staff.staff_no   is 'スタッフ番号';
+comment on column staff.name       is '氏名';
+comment on column staff.birthday   is '生年月日';
+
+create table if not exists staff_rev (
+    id              bigint,
+    version         bigint,
+    status          integer,
+    created_at      timestamp,
+    created_by      varchar,
+    updated_at      timestamp,
+    updated_by      varchar,
+    staff_no        varchar,
+    name            varchar,
+    birthday        date,
+    constraint pk_tbl_staff_rev primary key (id, version)
+);
+comment on table  staff_rev            is 'スタッフ';
+comment on column staff_rev.id         is 'ID:データの主キー';
+comment on column staff_rev.version    is 'バージョン(楽観的排他用)';
+comment on column staff_rev.status     is '公開区分:0=編集中,1=公開,2=非公開(論理削除)';
+comment on column staff_rev.created_at is '登録日時';
+comment on column staff_rev.created_by is '登録者';
+comment on column staff_rev.updated_at is '更新日時';
+comment on column staff_rev.updated_by is '更新者';
+comment on column staff_rev.staff_no   is 'スタッフ番号';
+comment on column staff_rev.name       is '氏名';
+comment on column staff_rev.birthday   is '生年月日';
+
+create view staff_view as
+select
+    id,
+    to_char(id, 'FM999999999999') as id_str,
+    version,
+    to_char(version, 'FM999999999999') as version_str,
+    status,
+    to_char(status, 'FM999999999999') as status_str,
+    created_at,
+    to_char(created_at, 'YYYY/MM/DD HH24:MI:SS') as created_at_str,
+    created_by,
+    updated_at,
+    to_char(updated_at, 'YYYY/MM/DD HH24:MI:SS') as updated_at_str,
+    updated_by,
+    staff_no,
+    name,
+    birthday,
+    to_char(birthday, 'YYYY/MM/DD HH24:MI:SS') as birthday_str
+from staff;
+
+comment on view   staff_view            is 'スタッフ';
+comment on column staff_view.id         is 'ID:データの主キー';
+comment on column staff_view.version    is 'バージョン(楽観的排他用)';
+comment on column staff_view.status     is '公開区分:0=編集中,1=公開,2=非公開(論理削除)';
+comment on column staff_view.created_at is '登録日時';
+comment on column staff_view.created_by is '登録者';
+comment on column staff_view.updated_at is '更新日時';
+comment on column staff_view.updated_by is '更新者';
+comment on column staff_view.staff_no   is 'スタッフ番号';
+comment on column staff_view.name       is '氏名';
+comment on column staff_view.birthday   is '生年月日';
