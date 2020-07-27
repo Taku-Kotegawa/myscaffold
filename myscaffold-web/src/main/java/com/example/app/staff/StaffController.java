@@ -1,7 +1,10 @@
 package com.example.app.staff;
 
+import com.example.domain.common.Constants;
+import com.example.domain.service.staff.StaffService;
 import com.example.domain.service.userdetails.LoggedInUser;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +22,9 @@ import static com.example.app.staff.StaffForm.Update;
 @Controller
 @RequestMapping("staff")
 public class StaffController {
+
+    @Autowired
+    StaffService staffService;
 
     /*
      * ハンドラーメソッドの引数
@@ -49,6 +55,10 @@ public class StaffController {
      */
     @GetMapping(value = "list")
     public String list(Model model, @AuthenticationPrincipal LoggedInUser loggedInUser) {
+
+        // 実行権限が無い場合、AccessDeniedExceptionをスローし、キャッチしないと権限エラー画面に遷移
+        staffService.hasAuthority(loggedInUser, Constants.OPERATION.LIST);
+
         return "staff/list";
     }
 
@@ -62,6 +72,12 @@ public class StaffController {
     public String createForm(Model model, @AuthenticationPrincipal LoggedInUser loggedInUser,
                              @RequestParam(name = "copy", required = false) String copy,
                              @RequestParam(name = "destination", required = false) String destination) {
+
+        // 実行権限が無い場合、AccessDeniedExceptionをスローし、キャッチしないと権限エラー画面に遷移
+        staffService.hasAuthority(loggedInUser, Constants.OPERATION.CREATE);
+
+        model.addAttribute("destination", destination);
+
         return "staff/createUpdateForm";
     }
 

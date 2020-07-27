@@ -5,11 +5,13 @@ import com.example.domain.example.*;
 import com.example.domain.repository.example.StaffRepository;
 import com.example.domain.repository.example.StaffRevRepository;
 import com.example.domain.repository.example.StaffViewRepository;
+import com.example.domain.service.userdetails.LoggedInUser;
 import com.github.dozermapper.core.Mapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.terasoluna.gfw.common.exception.ResourceNotFoundException;
@@ -305,5 +307,11 @@ public class StaffServiceImpl implements StaffService {
     @Transactional(readOnly = true)
     public List<StaffView> findViewByExample(StaffViewExample example, RowBounds rowBounds) {
         return staffViewRepository.selectByExampleWithRowbounds(example, rowBounds);
+    }
+
+    @Override
+    @PostAuthorize("returnObject == true")
+    public Boolean hasAuthority(LoggedInUser loggedInUser, String Operation) {
+        return null;
     }
 }
