@@ -2,9 +2,8 @@ package com.example.domain.repository.example;
 
 import com.example.domain.example.StaffView;
 import com.example.domain.example.StaffViewExample;
-import org.apache.ibatis.session.RowBounds;
-
 import java.util.List;
+import org.apache.ibatis.session.RowBounds;
 
 public interface StaffViewRepository {
     /**
