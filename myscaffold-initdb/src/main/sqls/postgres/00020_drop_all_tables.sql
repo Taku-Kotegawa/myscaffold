@@ -9,8 +9,8 @@ drop TABLE IF EXISTS account;
 drop TABLE IF EXISTS temp_file;
 drop TABLE IF EXISTS account_image;
 drop TABLE IF EXISTS sample1;
-drop TABLE IF EXISTS staff;
-drop TABLE IF EXISTS staff_rev;
 drop view  IF EXISTS staff_view;
+drop TABLE IF EXISTS staff_rev;
+drop TABLE IF EXISTS staff;
 
 commit;

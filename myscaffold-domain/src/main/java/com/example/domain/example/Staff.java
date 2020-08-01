@@ -1,8 +1,10 @@
 package com.example.domain.example;
 
+import com.example.domain.common.hasWhoColumnInterface;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.*;
-import lombok.experimental.Accessors;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -16,12 +18,9 @@ import java.time.LocalDateTime;
  * This class corresponds to the database table staff
  */
 @Data
-@Builder
-@Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-@AllArgsConstructor
 @ToString(callSuper = true)
-public class Staff extends AbstractLombokEntity implements Serializable {
+public class Staff extends AbstractLombokEntity implements hasWhoColumnInterface, Serializable {
     /**
      * Database Column Remarks:
      *   ID:データの主キー
@@ -31,7 +30,6 @@ public class Staff extends AbstractLombokEntity implements Serializable {
      *
      * @mbg.generated
      */
-    @NonNull
     private Long id;
 
     /**

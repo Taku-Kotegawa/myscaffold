@@ -17,7 +17,7 @@ public interface StaffService {
 
     Staff save(Staff record, Boolean asDraft);
 
-    Staff invalid(Staff record);
+    Staff invalid(Long id);
 
     Staff cancelDraft(long id);
 
@@ -45,6 +45,6 @@ public interface StaffService {
 
     List<StaffView> findViewByExample(StaffViewExample example, RowBounds rowBounds);
 
-    Boolean hasAuthority(LoggedInUser loggedInUser, String Operation);
+    Boolean hasAuthority(String Operation, LoggedInUser loggedInUser);
 
 }

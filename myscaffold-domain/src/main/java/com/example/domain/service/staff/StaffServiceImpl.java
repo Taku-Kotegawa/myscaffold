@@ -1,5 +1,6 @@
 package com.example.domain.service.staff;
 
+import com.example.domain.common.BeanUtils;
 import com.example.domain.common.Constants;
 import com.example.domain.example.*;
 import com.example.domain.repository.example.StaffRepository;
@@ -66,6 +67,8 @@ public class StaffServiceImpl implements StaffService {
     @Override
     public Staff create(Staff record, Boolean asDraft) {
 
+        if (asDraft == null) { asDraft = false; }
+
         // 入力チェック
         RuntimeException runtimeException = checkArgumentError(record, Constants.OPERATION.CREATE);
         if (runtimeException != null) {
@@ -76,10 +79,11 @@ public class StaffServiceImpl implements StaffService {
         if (asDraft) {
             record.setStatus(Constants.STATUS.DRAFT);
         } else {
-            record.setStatus(Constants.STATUS.PUBLISHED);
+            record.setStatus(Constants.STATUS.VALID);
         }
         record.setVersion(0L);
 
+        BeanUtils.setWhoColumn(record);
         long count = staffRepository.insert(record);
         if (count == 0) {
             // 登録に失敗したのでIllegalStateExceptionをスロー
@@ -113,6 +117,8 @@ public class StaffServiceImpl implements StaffService {
 
         long count;
 
+        if (asDraft == null) { asDraft = false; }
+
         // 上書き更新する前に保存しているデータを一時退避
         // Hiddenに持っていない項目などは必要に応じてrecordに値を復元
         Staff beforeRecord = findOne(record.getId());
@@ -125,8 +131,10 @@ public class StaffServiceImpl implements StaffService {
         if (asDraft) {
             record.setStatus(Constants.STATUS.DRAFT);
         } else {
-            record.setStatus(Constants.STATUS.PUBLISHED);
+            record.setStatus(Constants.STATUS.VALID);
         }
+
+        BeanUtils.setWhoColumn(record);
 
         // データ更新
         if (asDraft && isDraft) {
@@ -152,11 +160,11 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public Staff invalid(Staff record) {
+    public Staff invalid(Long id) {
 
         // 状態チェック
-        Staff target = findOne(record.getId());
-        if (Constants.STATUS.INVALID.equals(record.getStatus())) {
+        Staff record = findOne(id);
+        if (!Constants.STATUS.VALID.equals(record.getStatus())) {
             throw new IllegalStateException();
         }
 
@@ -166,14 +174,15 @@ public class StaffServiceImpl implements StaffService {
             throw exception;
         }
 
-        Staff update = Staff.builder()
-                .id(record.getId())
-                .version(record.getVersion())
-                .status(Constants.STATUS.INVALID)
-                .build();
+        Staff update = new Staff();
+        update.setId(record.getId());
+        update.setVersion(record.getVersion());
+        update.setStatus(Constants.STATUS.INVALID);
+
+        BeanUtils.setWhoColumn(update);
 
         // status のみ更新
-        long count = staffRepository.updateByPrimaryKeyAndVersionSelective(record);
+        long count = staffRepository.updateByPrimaryKeyAndVersionSelective(update);
 
         if (count == 0) {
             // 楽観的排他チェックエラー
@@ -190,17 +199,24 @@ public class StaffServiceImpl implements StaffService {
     @Override
     public Staff cancelDraft(long id) {
 
-        Staff beforeRecord = findOne(id);
-        if (!Constants.STATUS.DRAFT.equals(beforeRecord.getStatus())) {
+        Staff currentRecord = findOne(id);
+        if (!Constants.STATUS.DRAFT.equals(currentRecord.getStatus())) {
             // 下書きデータ以外はキャンセルできない
             throw new UnsupportedOperationException("id = " + id);
         }
 
-        // 履歴テーブルより直前の正保存データを復元
-        Staff afterRecord = beanMapper.map(staffRevRepository.selectByPrimaryKey(id, beforeRecord.getVersion() - 1L), Staff.class);
-        staffRepository.updateByPrimaryKey(afterRecord);
-
-        return null;
+        // 履歴テーブルより１世代前のデータを取得し、取得できればそれを復元する。
+        // 取得できなければ、今のデータを削除
+        StaffRev prevRecord = staffRevRepository.selectByPrimaryKey(id, currentRecord.getVersion() - 1L);
+        if (prevRecord != null) {
+            Staff afterRecord = beanMapper.map(prevRecord, Staff.class);
+            BeanUtils.setWhoColumn(afterRecord);
+            staffRepository.updateByPrimaryKey(afterRecord);
+            return findOne(id);
+        } else {
+            delete(id);
+            return null;
+        }
     }
 
     @Override
@@ -311,7 +327,7 @@ public class StaffServiceImpl implements StaffService {
 
     @Override
     @PostAuthorize("returnObject == true")
-    public Boolean hasAuthority(LoggedInUser loggedInUser, String Operation) {
-        return null;
+    public Boolean hasAuthority(String Operation, LoggedInUser loggedInUser) {
+        return true;
     }
 }

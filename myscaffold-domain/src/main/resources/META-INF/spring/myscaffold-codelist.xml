@@ -33,4 +33,16 @@
         </property>
     </bean>
 
+    <bean id="CL_ENTITYSTATUS" class="org.terasoluna.gfw.common.codelist.SimpleMapCodeList">
+        <property name="map">
+            <map>
+                <entry key="0" value="ドラフト" />
+                <entry key="1" value="有効" />
+                <entry key="2" value="無効" />
+            </map>
+        </property>
+    </bean>
+
+
+
 </beans>

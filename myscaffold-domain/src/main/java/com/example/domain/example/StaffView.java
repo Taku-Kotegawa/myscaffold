@@ -1,16 +1,14 @@
 package com.example.domain.example;
 
+import com.example.domain.common.hasWhoColumnInterface;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NonNull;
-import lombok.ToString;
-import lombok.experimental.Accessors;
 
 /**
  * Database Table Remarks:
@@ -20,12 +18,9 @@ import lombok.experimental.Accessors;
  * This class corresponds to the database table staff_view
  */
 @Data
-@Builder
-@Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-@AllArgsConstructor
 @ToString(callSuper = true)
-public class StaffView extends AbstractLombokEntity implements Serializable {
+public class StaffView extends AbstractLombokEntity implements hasWhoColumnInterface, Serializable {
     /**
      * Database Column Remarks:
      *   ID:データの主キー

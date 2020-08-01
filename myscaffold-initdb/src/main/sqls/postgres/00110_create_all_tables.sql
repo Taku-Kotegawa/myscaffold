@@ -172,7 +172,7 @@ COMMENT ON COLUMN sample1.boolean_boolean IS '真偽値１';
 COMMENT ON COLUMN sample1.binary_binary IS 'バイナリ';
 
 create table if not exists staff (
-    id              bigserial not null,
+    id              bigserial,
     version         bigint not null,
     status          integer not null,
     created_at      timestamp not null,

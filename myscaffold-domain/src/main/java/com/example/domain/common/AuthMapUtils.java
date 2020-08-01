@@ -4,22 +4,17 @@ import java.beans.Introspector;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class AuthMapUtils {
 
     private static final String DISABLED = "disabled";
     private static final String READONLY = "readonly";
     private static final String HIDDEN = "hidden";
+    private static final String INPUT = "input";
     private static final String VIEW = "view";
-    private static final String[] attributes = {DISABLED, READONLY, HIDDEN, VIEW};
 
-    public static Map<String, Boolean> initAuthMap(Class clazz) {
-        return initAuthMap(getFileds(clazz));
-    }
+    private static final String[] attributes = {DISABLED, READONLY, HIDDEN, VIEW, INPUT};
 
     public static void setDisabledTrue(Map<String, Boolean> authMap, String fieldName) {
         setAttribute(authMap, fieldName, DISABLED, true);
@@ -47,12 +42,10 @@ public class AuthMapUtils {
 
     public static void setViewTrue(Map<String, Boolean> authMap, String fieldName) {
         setAttribute(authMap, fieldName, VIEW, true);
-        setAttribute(authMap, fieldName, HIDDEN, true);
     }
 
     public static void setViewFalse(Map<String, Boolean> authMap, String fieldName) {
         setAttribute(authMap, fieldName, VIEW, false);
-        setAttribute(authMap, fieldName, HIDDEN, false);
     }
 
     public static void setDisabledTrueAll(Map<String, Boolean> authMap) {
@@ -79,14 +72,21 @@ public class AuthMapUtils {
         setAttributeAll(authMap, HIDDEN, false);
     }
 
+    public static void setInputTrueAll(Map<String, Boolean> authMap) {
+
+        setAttributeAll(authMap, INPUT, true);
+    }
+
+    public static void setInputFalseAll(Map<String, Boolean> authMap) {
+        setAttributeAll(authMap, INPUT, false);
+    }
+
     public static void setViewTrueAll(Map<String, Boolean> authMap) {
         setAttributeAll(authMap, VIEW, true);
-        setAttributeAll(authMap, HIDDEN, true);
     }
 
     public static void setViewFalseAll(Map<String, Boolean> authMap) {
         setAttributeAll(authMap, VIEW, false);
-        setAttributeAll(authMap, HIDDEN, false);
     }
 
     public static void addKey(Map<String, Boolean> authMap, String fieldName) {
@@ -103,6 +103,8 @@ public class AuthMapUtils {
         }
     }
 
+
+
     private static void setAttribute(Map<String, Boolean> authMap, String fieldName, String attribute, Boolean status) {
         String key = fieldName + "__" + attribute;
         if (authMap.get(key) != null) {
@@ -110,6 +112,24 @@ public class AuthMapUtils {
         } else {
             throw new IllegalArgumentException(key + " not found");
         }
+    }
+
+    public static Map<String, Boolean> initAuthMap(Class clazz) {
+        return initAuthMap(clazz, new ArrayList<>(), new ArrayList<>());
+    }
+
+
+    public static Map<String, Boolean> initAuthMap(Class clazz, List<String> includeKeys, List<String> excludeKeys) {
+        List<String> filedNames = getFileds(clazz);
+
+        Iterator<String> it = filedNames.listIterator();
+        while(it.hasNext()) {
+            if (excludeKeys.contains(it.next())) {
+                it.remove();
+            }
+        }
+        filedNames.addAll(includeKeys);
+        return initAuthMap(filedNames);
     }
 
     public static Map<String, Boolean> initAuthMap(List<String> fieldNames) {
@@ -179,6 +199,5 @@ public class AuthMapUtils {
     // インスタンス化禁止
     private void AuthMapUtils() {
     }
-
 
 }

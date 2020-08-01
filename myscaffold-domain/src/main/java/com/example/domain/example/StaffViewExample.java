@@ -1,11 +1,9 @@
 package com.example.domain.example;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.NonNull;
 
 public class StaffViewExample {
     /**
