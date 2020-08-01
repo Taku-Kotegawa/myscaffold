@@ -1,10 +1,3 @@
-<style>
-  .form-control__view {
-    box-shadow: unset;
-    background-color: unset;
-  }
-</style>
-
 <section class="content-header">
   <div class="container">
     <div class="row mb-2">
@@ -20,7 +13,7 @@
 </section>
 <section class="content">
   <div class="container">
-    <t:messagesPanel />
+    <t:messagesPanel panelClassName="callout" panelTypeClassPrefix="callout-" disableHtmlEscape="true" />
     <!-- ここより下にメインコンテンツを記入 -->
 
     <form:form modelAttribute="staffForm" enctype="multipart/form-data" autocomplete="off">
@@ -84,7 +77,7 @@
 
       <hr />
 
-      <div class="row">
+      <div class="row mb-3">
         <div class="col-12">
           <!-- ラベル -->
           <c:if test="${fieldState.staffNo__input || fieldState.staffNo__view}">
@@ -108,7 +101,8 @@
           </c:if>
         </div>
       </div>
-      <div class="row">
+
+      <div class="row mb-3">
         <div class="col-12">
           <!-- ラベル -->
           <c:if test="${fieldState.name__input || fieldState.name__view}">
@@ -132,7 +126,8 @@
           </c:if>
         </div>
       </div>
-      <div class="row">
+
+      <div class="row mb-3">
         <div class="col-12">
           <!-- ラベル -->
           <c:if test="${fieldState.birthday__input || fieldState.birthday__view}">

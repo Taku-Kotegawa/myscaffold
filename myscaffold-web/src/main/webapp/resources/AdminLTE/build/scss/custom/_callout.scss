@@ -15,3 +15,10 @@
   background-color: #eff4fa;
 }
 
+.callout-error {
+  @extend .callout-danger;
+}
+
+.callout ul {
+  margin-bottom: 0;
+}

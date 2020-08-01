@@ -3,69 +3,37 @@ package com.example.domain.common.message;
  * Message Id
  */
 public class MessageKeys {
-    /**
-     * e.xx.fw.5001=Resource not found.
-     */
+    /** e.xx.fw.5001=Resource not found. */
     public static final String E_XX_FW_5001 = "e.xx.fw.5001";
-    /**
-     * e.xx.fw.6001=File upload error occurred!
-     */
+    /** e.xx.fw.6001=File upload error occurred! */
     public static final String E_XX_FW_6001 = "e.xx.fw.6001";
-    /**
-     * e.xx.fw.7001=Illegal screen flow detected!
-     */
+    /** e.xx.fw.7001=Illegal screen flow detected! */
     public static final String E_XX_FW_7001 = "e.xx.fw.7001";
-    /**
-     * e.xx.fw.7002=CSRF attack detected!
-     */
+    /** e.xx.fw.7002=CSRF attack detected! */
     public static final String E_XX_FW_7002 = "e.xx.fw.7002";
-    /**
-     * e.xx.fw.7003=Access Denied detected!
-     */
+    /** e.xx.fw.7003=Access Denied detected! */
     public static final String E_XX_FW_7003 = "e.xx.fw.7003";
-    /**
-     * e.xx.fw.7004=Missing CSRF detected!
-     */
+    /** e.xx.fw.7004=Missing CSRF detected! */
     public static final String E_XX_FW_7004 = "e.xx.fw.7004";
-    /**
-     * e.xx.fw.7005=Prohibited character detected!
-     */
+    /** e.xx.fw.7005=Prohibited character detected! */
     public static final String E_XX_FW_7005 = "e.xx.fw.7005";
-    /**
-     * e.xx.fw.8001=Business error occurred!
-     */
+    /** e.xx.fw.8001=Business error occurred! */
     public static final String E_XX_FW_8001 = "e.xx.fw.8001";
-    /**
-     * e.xx.fw.9001=System error occurred!
-     */
+    /** e.xx.fw.9001=System error occurred! */
     public static final String E_XX_FW_9001 = "e.xx.fw.9001";
-    /**
-     * e.xx.fw.9002=Data Access error!
-     */
+    /** e.xx.fw.9002=Data Access error! */
     public static final String E_XX_FW_9002 = "e.xx.fw.9002";
-    /**
-     * e.sl.fw.5001=Resource not found.
-     */
+    /** e.sl.fw.5001=Resource not found. */
     public static final String E_SL_FW_5001 = "e.sl.fw.5001";
-    /**
-     * e.sl.fw.6001=File upload error occurred!
-     */
+    /** e.sl.fw.6001=File upload error occurred! */
     public static final String E_SL_FW_6001 = "e.sl.fw.6001";
-    /**
-     * e.sl.fw.7001=Illegal screen flow detected!
-     */
+    /** e.sl.fw.7001=Illegal screen flow detected! */
     public static final String E_SL_FW_7001 = "e.sl.fw.7001";
-    /**
-     * e.sl.fw.7002=CSRF attack detected!
-     */
+    /** e.sl.fw.7002=CSRF attack detected! */
     public static final String E_SL_FW_7002 = "e.sl.fw.7002";
-    /**
-     * e.sl.fw.7003=Access Denied detected!
-     */
+    /** e.sl.fw.7003=Access Denied detected! */
     public static final String E_SL_FW_7003 = "e.sl.fw.7003";
-    /**
-     * e.sl.fw.7004=Missing CSRF detected!
-     */
+    /** e.sl.fw.7004=Missing CSRF detected! */
     public static final String E_SL_FW_7004 = "e.sl.fw.7004";
     /** e.sl.fw.7005=Prohibited character detected! */
     public static final String E_SL_FW_7005 = "e.sl.fw.7005";
@@ -81,32 +49,34 @@ public class MessageKeys {
     public static final String E_SL_PR_5001 = "e.sl.pr.5001";
     /** e.sl.pr.5002=Given token was not found. */
     public static final String E_SL_PR_5002 = "e.sl.pr.5002";
-    /**
-     * e.sl.pr.5003=Invalid Secret.
-     */
+    /** e.sl.pr.5003=Invalid Secret. */
     public static final String E_SL_PR_5003 = "e.sl.pr.5003";
-    /**
-     * e.sl.pr.5004=Max number of attempts was exceeded.
-     */
+    /** e.sl.pr.5004=Max number of attempts was exceeded. */
     public static final String E_SL_PR_5004 = "e.sl.pr.5004";
-    /**
-     * e.sl.fa.5001=Given account is not found! username : {0}.
-     */
+    /** e.sl.fa.5001=Given account is not found! username : {0}. */
     public static final String E_SL_FA_5001 = "e.sl.fa.5001";
-    /**
-     * e.sl.ac.5001=Given username already exists!
-     */
+    /** e.sl.ac.5001=Given username already exists! */
     public static final String E_SL_AC_5001 = "e.sl.ac.5001";
-    /**
-     * w.sl.pe.0001=Your password has expired. Please change.
-     */
+    /** w.sl.pe.0001=Your password has expired. Please change. */
     public static final String W_SL_PE_0001 = "w.sl.pe.0001";
-    /**
-     * title.welcome.home=welcome home
-     */
+    /** title.welcome.home=welcome home */
     public static final String TITLE_WELCOME_HOME = "title.welcome.home";
     /** e.ad.od.5001=例外ハンドリングテスト */
     public static final String E_AD_OD_5001 = "e.ad.od.5001";
+    /** i.ar.fw.0001=登録しました。 */
+    public static final String I_AR_FW_0001 = "i.ar.fw.0001";
+    /** i.ar.fw.0002=状態を変更しました。 */
+    public static final String I_AR_FW_0002 = "i.ar.fw.0002";
+    /** i.ar.fw.0003=データを削除しました。 */
+    public static final String I_AR_FW_0003 = "i.ar.fw.0003";
+    /** w.ar.fw.2001=登録内容に変更はありません。 */
+    public static final String W_AR_FW_2001 = "w.ar.fw.2001";
+    /** w.ar.fw.2002=同じ番号が既に登録されています。({0} = {1}) */
+    public static final String W_AR_FW_2002 = "w.ar.fw.2002";
+    /** e.ar.fw.8001=楽観的排他制御により登録に失敗しました。画面を開き直して登録をやり直して下さい。 */
+    public static final String E_AR_FW_8001 = "e.ar.fw.8001";
+    /** e.ar.fw.9001=登録に失敗しました。({0}) */
+    public static final String E_AR_FW_9001 = "e.ar.fw.9001";
     /** input002=整数型 */
     public static final String INPUT002 = "input002";
 }

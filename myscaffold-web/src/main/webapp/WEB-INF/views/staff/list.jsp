@@ -13,7 +13,7 @@
 </section>
 <section class="content">
   <div class="container">
-    <t:messagesPanel />
+    <t:messagesPanel panelClassName="callout" panelTypeClassPrefix="callout-" disableHtmlEscape="true" />
     <!-- ここより下にメインコンテンツを記入 -->
     <div class="row">
       <div class="col-36 text-right">
@@ -41,8 +41,9 @@
             <td>${staff.birthday.format(DateTimeFormatter.ofPattern("yyyy/MM/dd"))}</td>
             <td>${CL_ENTITYSTATUS[f:h(staff.status)]}</td>
             <td>
-              <a href="${pageContext.request.contextPath}/staff/${staff.id}/update?form">編集</a>
-              | <a href="${pageContext.request.contextPath}/staff/${staff.id}">参照</a>
+              <a href="${pageContext.request.contextPath}/staff/${staff.id}">参照</a>
+              | <a href="${pageContext.request.contextPath}/staff/${staff.id}/update?form">編集</a>
+              | <a href="${pageContext.request.contextPath}/staff/create?form&copy=${staff.id}">複製</a>
             </td>
           </tr>
         </c:forEach>

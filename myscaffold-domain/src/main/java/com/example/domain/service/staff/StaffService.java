@@ -17,6 +17,8 @@ public interface StaffService {
 
     Staff save(Staff record, Boolean asDraft);
 
+    Staff save(Staff record, Boolean asDraft, Boolean checkChange);
+
     Staff invalid(Long id);
 
     Staff cancelDraft(long id);
@@ -30,8 +32,6 @@ public interface StaffService {
     Boolean exists(String staff_no);
 
     Boolean exists(long id);
-
-    Boolean hasChangedWithoutWhoColumn(Staff record);
 
     List<Staff> findByExample(StaffExample example);
 

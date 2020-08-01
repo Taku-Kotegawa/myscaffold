@@ -24,7 +24,7 @@
 </style>
 <section class="content">
   <div class="container">
-    <t:messagesPanel />
+    <t:messagesPanel panelClassName="callout" panelTypeClassPrefix="callout-" disableHtmlEscape="true" />
     <!-- ここより下にメインコンテンツを記入 -->
 
     <form:form action="guruauth" method="POST" modelAttribute="guruguruForm" enctype="multipart/form-data"

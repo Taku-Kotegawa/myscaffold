@@ -13,7 +13,7 @@
 </section>
 <section class="content">
   <div class="container">
-    <t:messagesPanel />
+    <t:messagesPanel panelClassName="callout" panelTypeClassPrefix="callout-" disableHtmlEscape="true" />
     <!-- ここより下にメインコンテンツを記入 -->
 
     <form:form action="validation" modelAttribute="validationForm" enctype="multipart/form-data" autocomplete="off">

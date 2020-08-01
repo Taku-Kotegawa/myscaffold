@@ -15,7 +15,7 @@
   <div class="container">
     <!-- ここより下にメインコンテンツを記入 -->
 
-    <t:messagesPanel />
+    <t:messagesPanel panelClassName="callout" panelTypeClassPrefix="callout-" disableHtmlEscape="true" />
 
     <form:form action="${f:h(pageContext.request.contextPath)}/accounts/create" method="POST"
       modelAttribute="accountCreateForm" enctype="multipart/form-data" autocomplete="off">

@@ -14,7 +14,7 @@
             <c:if test="${!empty exceptionCode}">[${f:h(exceptionCode)}]</c:if>
             <spring:message code="e.xx.fw.5001" />
         </div>
-        <t:messagesPanel />
+        <t:messagesPanel panelClassName="callout" panelTypeClassPrefix="callout-" disableHtmlEscape="true" />
         <br>
         <br>
         <br>

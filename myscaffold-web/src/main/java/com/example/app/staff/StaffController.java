@@ -2,6 +2,7 @@ package com.example.app.staff;
 
 import com.example.domain.common.Constants;
 import com.example.domain.common.StateMap;
+import com.example.domain.common.message.MessageKeys;
 import com.example.domain.example.Staff;
 import com.example.domain.example.StaffExample;
 import com.example.domain.service.staff.StaffService;
@@ -16,6 +17,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.terasoluna.gfw.common.exception.BusinessException;
+import org.terasoluna.gfw.common.message.ResultMessages;
 import org.terasoluna.gfw.web.token.transaction.TransactionTokenCheck;
 import org.terasoluna.gfw.web.token.transaction.TransactionTokenType;
 
@@ -199,12 +202,23 @@ public class StaffController {
      */
     @GetMapping(value = "create", params = "form")
     @TransactionTokenCheck(type = TransactionTokenType.BEGIN)
-    public String createForm(Model model, @AuthenticationPrincipal LoggedInUser loggedInUser,
+    public String createForm(StaffForm form, Model model, @AuthenticationPrincipal LoggedInUser loggedInUser,
                              @RequestParam(name = "copy", required = false) String copy,
                              @RequestParam(name = "destination", required = false) String destination) {
 
         // 実行権限が無い場合、AccessDeniedExceptionをスローし、キャッチしないと権限エラー画面に遷移
         staffService.hasAuthority(OPERATION.CREATE, loggedInUser);
+
+        // 複製
+        if (copy != null && staffService.exists(Long.parseLong(copy))) {
+            Staff source = staffService.findOne(Long.parseLong(copy));
+            if (source != null) {
+                beanMapper.map(source, form);
+                form.setId(null);
+                form.setVersion(null);
+                form.setStaffNo(null);
+            }
+        }
 
         // ボタンの状態を設定
         StateMap buttonState = getButtonStateMap(OPERATION.CREATE, null);
@@ -260,7 +274,15 @@ public class StaffController {
 
         Staff staff = beanMapper.map(form, Staff.class);
 
-        staffService.create(staff, form.getSaveAsDraft());
+        try {
+            staffService.create(staff, form.getSaveAsDraft());
+        } catch (BusinessException e) {
+            model.addAttribute(e.getResultMessages());
+            return createRedo(form, model, loggedInUser, destination);
+        }
+
+        ResultMessages messages = ResultMessages.info().add(MessageKeys.I_AR_FW_0001);
+        model.addAttribute(messages);
 
         return "redirect:" + staff.getId() + "/update?form";
     }
@@ -327,7 +349,18 @@ public class StaffController {
         }
 
         Staff staff = beanMapper.map(form, Staff.class);
-        staffService.save(staff, form.getSaveAsDraft());
+
+//        if (staffService.hasNotChangedWithoutWhoColumn(staff)) {
+//            model.addAttribute(ResultMessages.warning().add(MessageKeys.W_AR_FW_0003));
+//            return updateRedo(form, model, loggedInUser, id, destination);
+//        }
+
+        try {
+            staffService.save(staff, form.getSaveAsDraft());
+        } catch (BusinessException e) {
+            model.addAttribute(e.getResultMessages());
+            return updateRedo(form, model, loggedInUser, id, destination);
+        }
 
         return "redirect:/staff/{id}/update?form";
     }
@@ -344,9 +377,18 @@ public class StaffController {
         // 実行権限が無い場合、AccessDeniedExceptionをスローし、キャッチしないと権限エラー画面に遷移
         staffService.hasAuthority(OPERATION.UPDATE, loggedInUser);
 
-        if (staffService.cancelDraft(form.getId()) != null) {
+
+        try {
+            staffService.cancelDraft(form.getId());
+        } catch (BusinessException e) {
+            model.addAttribute(e.getResultMessages());
+            return updateRedo(form, model, loggedInUser, id, destination);
+        }
+
+        if (staffService.exists(form.getId())) {
             return "redirect:/staff/{id}/update?form";
         } else {
+            // 確定していない状態で下書きを取り消すとデータがデータが残らないので一覧に戻る。
             return "redirect:/staff/list";
         }
 
@@ -366,7 +408,11 @@ public class StaffController {
         // 実行権限が無い場合、AccessDeniedExceptionをスローし、キャッチしないと権限エラー画面に遷移
         staffService.hasAuthority(OPERATION.DELETE, loggedInUser);
 
-        staffService.deleteWithHistory(id);
+        try {
+            staffService.deleteWithHistory(id);
+        } catch (BusinessException e) {
+            model.addAttribute(e.getResultMessages());
+        }
 
         return "redirect:/staff/list";
     }
@@ -382,7 +428,11 @@ public class StaffController {
         // 実行権限が無い場合、AccessDeniedExceptionをスローし、キャッチしないと権限エラー画面に遷移
         staffService.hasAuthority(OPERATION.INVALID, loggedInUser);
 
-        staffService.invalid(id);
+        try {
+            staffService.invalid(id);
+        } catch (BusinessException e) {
+            model.addAttribute(e.getResultMessages());
+        }
 
         return "redirect:/staff/{id}";
     }
@@ -394,8 +444,8 @@ public class StaffController {
      */
     @GetMapping(value = "{id}")
     public String view(Model model, @AuthenticationPrincipal LoggedInUser loggedInUser,
-                         @PathVariable("id") Long id,
-                         @RequestParam(name = "destination", required = false) String destination) {
+                       @PathVariable("id") Long id,
+                       @RequestParam(name = "destination", required = false) String destination) {
 
         // 実行権限が無い場合、AccessDeniedExceptionをスローし、キャッチしないと権限エラー画面に遷移
         staffService.hasAuthority(OPERATION.VIEW, loggedInUser);

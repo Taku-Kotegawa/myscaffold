@@ -1,7 +1,7 @@
 package com.example.domain.service.staff;
 
 import com.example.domain.common.BeanUtils;
-import com.example.domain.common.Constants;
+import com.example.domain.common.message.MessageKeys;
 import com.example.domain.example.*;
 import com.example.domain.repository.example.StaffRepository;
 import com.example.domain.repository.example.StaffRevRepository;
@@ -15,9 +15,14 @@ import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.terasoluna.gfw.common.exception.BusinessException;
 import org.terasoluna.gfw.common.exception.ResourceNotFoundException;
+import org.terasoluna.gfw.common.message.ResultMessages;
 
 import java.util.List;
+
+import static com.example.domain.common.Constants.OPERATION;
+import static com.example.domain.common.Constants.STATUS;
 
 @Slf4j
 @Transactional
@@ -70,24 +75,30 @@ public class StaffServiceImpl implements StaffService {
         if (asDraft == null) { asDraft = false; }
 
         // 入力チェック
-        RuntimeException runtimeException = checkArgumentError(record, Constants.OPERATION.CREATE);
+        RuntimeException runtimeException = checkArgumentError(record, OPERATION.CREATE);
         if (runtimeException != null) {
             throw runtimeException;
         }
 
+        // 状態チェック(主キーの重複)
+        if (!exists(record.getStaffNo())) {
+            ResultMessages messages = ResultMessages.error().add(MessageKeys.W_AR_FW_2002, "従業員番号", record.getStaffNo());
+            throw new BusinessException(messages);
+        }
+
         // 初期値をセット
         if (asDraft) {
-            record.setStatus(Constants.STATUS.DRAFT);
+            record.setStatus(STATUS.DRAFT);
         } else {
-            record.setStatus(Constants.STATUS.VALID);
+            record.setStatus(STATUS.VALID);
         }
         record.setVersion(0L);
-
         BeanUtils.setWhoColumn(record);
+
         long count = staffRepository.insert(record);
         if (count == 0) {
             // 登録に失敗したのでIllegalStateExceptionをスロー
-            throw new IllegalStateException("Staff_no = " + record.getStaffNo());
+            throw new IllegalStateException("staff_no = " + record.getStaffNo());
         }
 
         // 本保存のみ履歴テーブルにデータコピー
@@ -114,6 +125,11 @@ public class StaffServiceImpl implements StaffService {
 
     @Override
     public Staff save(Staff record, Boolean asDraft) {
+        return save(record, asDraft, true);
+    }
+
+    @Override
+    public Staff save(Staff record, Boolean asDraft, Boolean checkChange) {
 
         long count;
 
@@ -125,16 +141,22 @@ public class StaffServiceImpl implements StaffService {
         // 復元する値なし
 
         // 登録済みデータが仮保存かどうか
-        boolean isDraft = Constants.STATUS.DRAFT.equals(beforeRecord.getStatus());
+        boolean isDraft = STATUS.DRAFT.equals(beforeRecord.getStatus());
 
         // 固定値設定
         if (asDraft) {
-            record.setStatus(Constants.STATUS.DRAFT);
+            record.setStatus(STATUS.DRAFT);
         } else {
-            record.setStatus(Constants.STATUS.VALID);
+            record.setStatus(STATUS.VALID);
         }
 
         BeanUtils.setWhoColumn(record);
+
+        if (checkChange) {
+            if (hasNotChangedWithoutWhoColumn(record)) {
+                throw new BusinessException(ResultMessages.warning().add(MessageKeys.W_AR_FW_2001));
+            }
+        }
 
         // データ更新
         if (asDraft && isDraft) {
@@ -147,7 +169,7 @@ public class StaffServiceImpl implements StaffService {
             count = staffRepository.updateByPrimaryKeyAndVersion(record);
             if (count == 0) {
                 // 楽観的排他チェックエラー
-                throw new OptimisticLockingFailureException("StaffNo = " + record.getStaffNo() + ", version = " + record.getVersion());
+                throw new BusinessException(ResultMessages.warning().add(MessageKeys.E_AR_FW_8001));
             }
         }
 
@@ -157,6 +179,7 @@ public class StaffServiceImpl implements StaffService {
         }
 
         return findOne(record.getId());
+
     }
 
     @Override
@@ -164,20 +187,14 @@ public class StaffServiceImpl implements StaffService {
 
         // 状態チェック
         Staff record = findOne(id);
-        if (!Constants.STATUS.VALID.equals(record.getStatus())) {
+        if (!STATUS.VALID.equals(record.getStatus())) {
             throw new IllegalStateException();
-        }
-
-        // 入力チェック
-        RuntimeException exception = checkArgumentError(record, Constants.OPERATION.CREATE);
-        if (exception != null) {
-            throw exception;
         }
 
         Staff update = new Staff();
         update.setId(record.getId());
         update.setVersion(record.getVersion());
-        update.setStatus(Constants.STATUS.INVALID);
+        update.setStatus(STATUS.INVALID);
 
         BeanUtils.setWhoColumn(update);
 
@@ -199,8 +216,9 @@ public class StaffServiceImpl implements StaffService {
     @Override
     public Staff cancelDraft(long id) {
 
+        // 状態チェック
         Staff currentRecord = findOne(id);
-        if (!Constants.STATUS.DRAFT.equals(currentRecord.getStatus())) {
+        if (!STATUS.DRAFT.equals(currentRecord.getStatus())) {
             // 下書きデータ以外はキャンセルできない
             throw new UnsupportedOperationException("id = " + id);
         }
@@ -265,9 +283,7 @@ public class StaffServiceImpl implements StaffService {
         return true;
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public Boolean hasChangedWithoutWhoColumn(Staff record) {
+    private Boolean hasNotChangedWithoutWhoColumn(Staff record) {
 
         Staff copy = beanMapper.map(record, Staff.class);
         Staff original = findOne(record.getId());

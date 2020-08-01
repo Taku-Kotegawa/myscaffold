@@ -13,7 +13,7 @@
 </section>
 <section class="content">
   <div class="container">
-    <t:messagesPanel />
+    <t:messagesPanel panelClassName="callout" panelTypeClassPrefix="callout-" disableHtmlEscape="true" />
     <!-- ここより下にメインコンテンツを記入 -->
 
     <form:form action="${f:h(pageContext.request.contextPath)}/reissue/create" method="POST"

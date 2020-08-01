@@ -12,30 +12,13 @@
         <div class="error">
             <c:if test="${!empty exceptionCode}">[${f:h(exceptionCode)}]</c:if>
         </div>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
+
+<br>
+<br>
+<br>
+<br>
+<%@ include file="/WEB-INF/views/common/includes/include-debug.jsp" %>
+
     </div>
 </body>
 </html>
