@@ -409,7 +409,7 @@ public class StaffController {
         staffService.hasAuthority(OPERATION.DELETE, loggedInUser);
 
         try {
-            staffService.deleteWithHistory(id);
+            staffService.deleteWithRevision(id);
         } catch (BusinessException e) {
             model.addAttribute(e.getResultMessages());
         }

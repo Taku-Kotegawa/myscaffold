@@ -1,21 +1,24 @@
 package com.example.domain.service.staff;
 
 import com.example.domain.common.BeanUtils;
+import com.example.domain.common.exception.DuplicateKeyBusinessException;
+import com.example.domain.common.exception.NoChangeBusinessException;
+import com.example.domain.common.exception.OptimisticLockingFailureBusinessException;
 import com.example.domain.common.message.MessageKeys;
-import com.example.domain.example.*;
+import com.example.domain.example.Staff;
+import com.example.domain.example.StaffExample;
+import com.example.domain.example.StaffRev;
+import com.example.domain.example.StaffRevExample;
 import com.example.domain.repository.example.StaffRepository;
 import com.example.domain.repository.example.StaffRevRepository;
-import com.example.domain.repository.example.StaffViewRepository;
 import com.example.domain.service.userdetails.LoggedInUser;
 import com.github.dozermapper.core.Mapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.terasoluna.gfw.common.exception.BusinessException;
 import org.terasoluna.gfw.common.exception.ResourceNotFoundException;
 import org.terasoluna.gfw.common.message.ResultMessages;
 
@@ -36,31 +39,24 @@ public class StaffServiceImpl implements StaffService {
     StaffRevRepository staffRevRepository;
 
     @Autowired
-    StaffViewRepository staffViewRepository;
-
-    @Autowired
     Mapper beanMapper;
 
     @Override
     @Transactional(readOnly = true)
     public Staff findOne(String staff_no) {
-
         StaffExample example = new StaffExample();
         example.or().andStaffNoEqualTo(staff_no);
         List<Staff> staffList = staffRepository.selectByExample(example);
-
-        // データがなければResouceNotFoundExceptionをスロー
+        // データがなければResourceNotFoundExceptionをスロー
         if (staffList.size() == 0) {
             throw new ResourceNotFoundException("staff_no = " + staff_no);
         }
-
         return staffList.get(0);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Staff findOne(long id) {
-
         Staff staff = staffRepository.selectByPrimaryKey(id);
         // データがなければResourceNotFoundExceptionをスロー
         if (staff == null) {
@@ -75,15 +71,12 @@ public class StaffServiceImpl implements StaffService {
         if (asDraft == null) { asDraft = false; }
 
         // 入力チェック
-        RuntimeException runtimeException = checkArgumentError(record, OPERATION.CREATE);
-        if (runtimeException != null) {
-            throw runtimeException;
-        }
+        checkArgumentError(record, OPERATION.CREATE);
 
         // 状態チェック(主キーの重複)
-        if (!exists(record.getStaffNo())) {
+        if (exists(record.getStaffNo())) {
             ResultMessages messages = ResultMessages.error().add(MessageKeys.W_AR_FW_2002, "従業員番号", record.getStaffNo());
-            throw new BusinessException(messages);
+            throw new DuplicateKeyBusinessException(messages);
         }
 
         // 初期値をセット
@@ -114,13 +107,12 @@ public class StaffServiceImpl implements StaffService {
      *
      * @param record    対象エンティティ
      * @param operation 操作種別
-     * @return null=エラーなし、RuntimeException=例外
+     * @throws IllegalArgumentException 入力内容に不備がある場合
      */
-    private RuntimeException checkArgumentError(Staff record, String operation) {
+    private void checkArgumentError(Staff record, String operation) {
 
-        // 入力チェックエラーがあればIllegalArgumentException をスロー
+        // 入力チェックエラーがあればIllegalArgumentExceptionをスロー
 
-        return null;
     }
 
     @Override
@@ -131,45 +123,46 @@ public class StaffServiceImpl implements StaffService {
     @Override
     public Staff save(Staff record, Boolean asDraft, Boolean checkChange) {
 
-        long count;
-
         if (asDraft == null) { asDraft = false; }
 
+        // 入力チェック
+        checkArgumentError(record, OPERATION.UPDATE);
+
+
         // 上書き更新する前に保存しているデータを一時退避
-        // Hiddenに持っていない項目などは必要に応じてrecordに値を復元
         Staff beforeRecord = findOne(record.getId());
-        // 復元する値なし
 
         // 登録済みデータが仮保存かどうか
         boolean isDraft = STATUS.DRAFT.equals(beforeRecord.getStatus());
 
         // 固定値設定
-        if (asDraft) {
-            record.setStatus(STATUS.DRAFT);
-        } else {
-            record.setStatus(STATUS.VALID);
-        }
-
+        record.setStatus(asDraft ? STATUS.DRAFT : STATUS.VALID);
         BeanUtils.setWhoColumn(record);
-
-        if (checkChange) {
-            if (hasNotChangedWithoutWhoColumn(record)) {
-                throw new BusinessException(ResultMessages.warning().add(MessageKeys.W_AR_FW_2001));
-            }
-        }
 
         // データ更新
         if (asDraft && isDraft) {
             // 下書き保存の上書きはVersionをカウントアップしない
-            count = staffRepository.updateByPrimaryKey(record);
+            int count = staffRepository.updateByPrimaryKey(record);
             if (count == 0) {
                 throw new ResourceNotFoundException("StaffNo = " + record.getStaffNo());
             }
         } else {
-            count = staffRepository.updateByPrimaryKeyAndVersion(record);
+
+            // 登録内容と保存されている値を比較、変更がなければ例外をスロー
+            if (checkChange) {
+                Boolean withoutStatus = true;
+                if (!asDraft && isDraft) {
+                    withoutStatus = false;
+                }
+                if (hasNotChangedWithoutWhoColumn(record, beforeRecord, withoutStatus)) {
+                    throw new NoChangeBusinessException(ResultMessages.warning().add(MessageKeys.W_AR_FW_2001));
+                }
+            }
+
+            int count = staffRepository.updateByPrimaryKeyAndVersion(record);
             if (count == 0) {
                 // 楽観的排他チェックエラー
-                throw new BusinessException(ResultMessages.warning().add(MessageKeys.E_AR_FW_8001));
+                throw new OptimisticLockingFailureBusinessException(ResultMessages.warning().add(MessageKeys.E_AR_FW_8001));
             }
         }
 
@@ -179,7 +172,6 @@ public class StaffServiceImpl implements StaffService {
         }
 
         return findOne(record.getId());
-
     }
 
     @Override
@@ -203,7 +195,7 @@ public class StaffServiceImpl implements StaffService {
 
         if (count == 0) {
             // 楽観的排他チェックエラー
-            throw new OptimisticLockingFailureException("StaffNo = " + record.getStaffNo() + ", version = " + record.getVersion());
+            throw new OptimisticLockingFailureBusinessException(ResultMessages.warning().add(MessageKeys.E_AR_FW_8001));
         }
 
         // 更新結果を取得し、履歴テーブルにデータコピー
@@ -220,7 +212,7 @@ public class StaffServiceImpl implements StaffService {
         Staff currentRecord = findOne(id);
         if (!STATUS.DRAFT.equals(currentRecord.getStatus())) {
             // 下書きデータ以外はキャンセルできない
-            throw new UnsupportedOperationException("id = " + id);
+            throw new IllegalStateException("id = " + id);
         }
 
         // 履歴テーブルより１世代前のデータを取得し、取得できればそれを復元する。
@@ -228,19 +220,12 @@ public class StaffServiceImpl implements StaffService {
         StaffRev prevRecord = staffRevRepository.selectByPrimaryKey(id, currentRecord.getVersion() - 1L);
         if (prevRecord != null) {
             Staff afterRecord = beanMapper.map(prevRecord, Staff.class);
-            BeanUtils.setWhoColumn(afterRecord);
             staffRepository.updateByPrimaryKey(afterRecord);
             return findOne(id);
         } else {
             delete(id);
             return null;
         }
-    }
-
-    @Override
-    public void delete(String staff_no) {
-        Staff record = findOne(staff_no);
-        delete(record.getId());
     }
 
     @Override
@@ -253,7 +238,7 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public void deleteWithHistory(long id) {
+    public void deleteWithRevision(long id) {
         delete(id);
         StaffRevExample example = new StaffRevExample();
         example.or().andIdEqualTo(id);
@@ -283,14 +268,18 @@ public class StaffServiceImpl implements StaffService {
         return true;
     }
 
-    private Boolean hasNotChangedWithoutWhoColumn(Staff record) {
+    private Boolean hasNotChangedWithoutWhoColumn(Staff record, Staff beforeRecord, Boolean withoutStatus) {
+        Staff recordCopy = beanMapper.map(record, Staff.class);
+        unsetWhoColumn(recordCopy);
+        Staff beforeCopy = beanMapper.map(beforeRecord, Staff.class);
+        unsetWhoColumn(beforeCopy);
 
-        Staff copy = beanMapper.map(record, Staff.class);
-        Staff original = findOne(record.getId());
-        unsetWhoColumn(original);
-        unsetWhoColumn(copy);
+        if (withoutStatus) {
+            recordCopy.setStatus(null);
+            beforeCopy.setStatus(null);
+        }
 
-        return copy.equals(original);
+        return recordCopy.equals(beforeCopy);
     }
 
     /**
@@ -315,30 +304,6 @@ public class StaffServiceImpl implements StaffService {
     @Transactional(readOnly = true)
     public List<Staff> findByExample(StaffExample example, RowBounds rowBounds) {
         return staffRepository.selectByExampleWithRowbounds(example, rowBounds);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<StaffRev> findRevByExample(StaffRevExample example) {
-        return staffRevRepository.selectByExample(example);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<StaffRev> findRevByExample(StaffRevExample example, RowBounds rowBounds) {
-        return staffRevRepository.selectByExampleWithRowbounds(example, rowBounds);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<StaffView> findViewByExample(StaffViewExample example) {
-        return staffViewRepository.selectByExample(example);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<StaffView> findViewByExample(StaffViewExample example, RowBounds rowBounds) {
-        return staffViewRepository.selectByExampleWithRowbounds(example, rowBounds);
     }
 
     @Override
