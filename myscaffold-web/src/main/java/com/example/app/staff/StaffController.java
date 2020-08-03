@@ -282,7 +282,7 @@ public class StaffController {
         }
 
         ResultMessages messages = ResultMessages.info().add(MessageKeys.I_AR_FW_0001);
-        model.addAttribute(messages);
+        redirect.addFlashAttribute(messages);
 
         return "redirect:" + staff.getId() + "/update?form";
     }
@@ -336,8 +336,11 @@ public class StaffController {
      */
     @PostMapping(value = "{id}/update")
     @TransactionTokenCheck
-    public String update(@Validated({Update.class, Default.class}) StaffForm form, BindingResult bindingResult,
-                         Model model, @AuthenticationPrincipal LoggedInUser loggedInUser,
+    public String update(@Validated({Update.class, Default.class}) StaffForm form,
+                         BindingResult bindingResult,
+                         Model model,
+                         RedirectAttributes redirect,
+                         @AuthenticationPrincipal LoggedInUser loggedInUser,
                          @PathVariable("id") Long id,
                          @RequestParam(name = "destination", required = false) String destination) {
 
@@ -350,17 +353,15 @@ public class StaffController {
 
         Staff staff = beanMapper.map(form, Staff.class);
 
-//        if (staffService.hasNotChangedWithoutWhoColumn(staff)) {
-//            model.addAttribute(ResultMessages.warning().add(MessageKeys.W_AR_FW_0003));
-//            return updateRedo(form, model, loggedInUser, id, destination);
-//        }
-
         try {
             staffService.save(staff, form.getSaveAsDraft());
         } catch (BusinessException e) {
             model.addAttribute(e.getResultMessages());
             return updateRedo(form, model, loggedInUser, id, destination);
         }
+
+        ResultMessages messages = ResultMessages.info().add(MessageKeys.I_AR_FW_0004);
+        redirect.addFlashAttribute(messages);
 
         return "redirect:/staff/{id}/update?form";
     }
@@ -369,14 +370,16 @@ public class StaffController {
 
     @PostMapping(value = "{id}/update", params = "cancelDraft")
     @TransactionTokenCheck
-    public String cancelDraft(StaffForm form, BindingResult bindingResult,
-                              Model model, @AuthenticationPrincipal LoggedInUser loggedInUser,
+    public String cancelDraft(StaffForm form,
+                              BindingResult bindingResult,
+                              Model model,
+                              RedirectAttributes redirect,
+                              @AuthenticationPrincipal LoggedInUser loggedInUser,
                               @PathVariable("id") Long id,
                               @RequestParam(name = "destination", required = false) String destination) {
 
         // 実行権限が無い場合、AccessDeniedExceptionをスローし、キャッチしないと権限エラー画面に遷移
         staffService.hasAuthority(OPERATION.UPDATE, loggedInUser);
-
 
         try {
             staffService.cancelDraft(form.getId());
@@ -384,6 +387,9 @@ public class StaffController {
             model.addAttribute(e.getResultMessages());
             return updateRedo(form, model, loggedInUser, id, destination);
         }
+
+        ResultMessages messages = ResultMessages.info().add(MessageKeys.I_AR_FW_0006);
+        redirect.addFlashAttribute(messages);
 
         if (staffService.exists(form.getId())) {
             return "redirect:/staff/{id}/update?form";
@@ -401,7 +407,7 @@ public class StaffController {
      */
     @GetMapping(value = "{id}/delete")
     @TransactionTokenCheck(type = TransactionTokenType.BEGIN)
-    public String delete(Model model, RedirectAttributes attributes, @AuthenticationPrincipal LoggedInUser loggedInUser,
+    public String delete(Model model, RedirectAttributes redirect, @AuthenticationPrincipal LoggedInUser loggedInUser,
                          @PathVariable("id") Long id,
                          @RequestParam(name = "destination", required = false) String destination) {
 
@@ -414,6 +420,9 @@ public class StaffController {
             model.addAttribute(e.getResultMessages());
         }
 
+        ResultMessages messages = ResultMessages.info().add(MessageKeys.I_AR_FW_0007);
+        redirect.addFlashAttribute(messages);
+
         return "redirect:/staff/list";
     }
 
@@ -421,7 +430,7 @@ public class StaffController {
 
     @GetMapping(value = "{id}/invalid")
     @TransactionTokenCheck(type = TransactionTokenType.BEGIN)
-    public String invalid(Model model, RedirectAttributes attributes, @AuthenticationPrincipal LoggedInUser loggedInUser,
+    public String invalid(Model model, RedirectAttributes redirect, @AuthenticationPrincipal LoggedInUser loggedInUser,
                           @PathVariable("id") Long id,
                           @RequestParam(name = "destination", required = false) String destination) {
 
@@ -433,6 +442,9 @@ public class StaffController {
         } catch (BusinessException e) {
             model.addAttribute(e.getResultMessages());
         }
+
+        ResultMessages messages = ResultMessages.info().add(MessageKeys.I_AR_FW_0002);
+        redirect.addFlashAttribute(messages);
 
         return "redirect:/staff/{id}";
     }

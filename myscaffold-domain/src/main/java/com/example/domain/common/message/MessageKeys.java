@@ -69,9 +69,17 @@ public class MessageKeys {
     public static final String I_AR_FW_0002 = "i.ar.fw.0002";
     /** i.ar.fw.0003=データを削除しました。 */
     public static final String I_AR_FW_0003 = "i.ar.fw.0003";
+    /** i.ar.fw.0004=保存しました。 */
+    public static final String I_AR_FW_0004 = "i.ar.fw.0004";
+    /** i.ar.fw.0005=下書き保存しました。 */
+    public static final String I_AR_FW_0005 = "i.ar.fw.0005";
+    /** i.ar.fw.0006=下書きを取り消しました。 */
+    public static final String I_AR_FW_0006 = "i.ar.fw.0006";
+    /** i.ar.fw.0007=削除しました。。 */
+    public static final String I_AR_FW_0007 = "i.ar.fw.0007";
     /** w.ar.fw.2001=登録内容に変更はありません。 */
     public static final String W_AR_FW_2001 = "w.ar.fw.2001";
-    /** w.ar.fw.2002=同じ番号が既に登録されています。({0} = {1}) */
+    /** w.ar.fw.2002=同じ値が既に登録されています。({0} = {1}) */
     public static final String W_AR_FW_2002 = "w.ar.fw.2002";
     /** e.ar.fw.8001=楽観的排他制御により登録に失敗しました。画面を開き直して登録をやり直して下さい。 */
     public static final String E_AR_FW_8001 = "e.ar.fw.8001";

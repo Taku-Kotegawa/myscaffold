@@ -8,3 +8,4 @@ public class InvalidArgumentBusinessException extends BusinessException {
         super(messages);
     }
 }
+
