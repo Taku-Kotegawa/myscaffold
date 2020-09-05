@@ -47,6 +47,21 @@ public class JohoController {
     }
 
     @PreAuthorize("hasAnyRole('USER')")
+    @GetMapping(value = "create", params = "form")
+    public String createForm(Model model,
+                             @AuthenticationPrincipal LoggedInUser loggedInUser) {
+        return "joho/form";
+    }
+
+    @PreAuthorize("hasAnyRole('USER')")
+    @GetMapping(value = "create", params = "redo")
+    public String createRedo(Model model,
+                             @AuthenticationPrincipal LoggedInUser loggedInUser) {
+        return createRedo(model, loggedInUser);
+    }
+
+
+    @PreAuthorize("hasAnyRole('USER')")
     @GetMapping(value = "{seq}/edit", params = "form")
     public String editForm(Model model,
                            @PathVariable("seq") BigDecimal cdSeq,
@@ -63,7 +78,7 @@ public class JohoController {
     }
 
     @PreAuthorize("hasAnyRole('USER')")
-    @PostMapping("edit")
+    @PostMapping("save")
     public String save(@Validated JohoForm form, BindingResult bindingResult,
                        Model model, @AuthenticationPrincipal LoggedInUser loggedInUser) {
         return "redirect:/joho/list";

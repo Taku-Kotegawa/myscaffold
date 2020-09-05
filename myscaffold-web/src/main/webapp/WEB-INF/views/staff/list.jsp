@@ -1,3 +1,5 @@
+<%@ include file="/WEB-INF/views/common/includes/include-datatables.jsp" %>
+
 <section class="content-header">
   <div class="container">
     <div class="row mb-2">

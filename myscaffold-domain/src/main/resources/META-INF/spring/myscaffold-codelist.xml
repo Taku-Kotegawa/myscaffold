@@ -43,6 +43,15 @@
         </property>
     </bean>
 
-
+    <bean id="CL_CATEGORY" parent="AbstractJdbcCodeList">
+        <property name="querySql" value="SELECT CD_CODE, DT_TEXT1 FROM TM_CODE WHERE CD_SHU = '1' ORDER BY CD_CODE" />
+        <property name="valueColumn" value="CD_CODE" />
+        <property name="labelColumn" value="DT_TEXT1" />
+    </bean>
+    <bean id="CL_BROWSE" parent="AbstractJdbcCodeList">
+        <property name="querySql" value="SELECT CD_CODE, DT_TEXT1 FROM TM_CODE WHERE CD_SHU = '2' ORDER BY CD_CODE" />
+        <property name="valueColumn" value="CD_CODE" />
+        <property name="labelColumn" value="DT_TEXT1" />
+    </bean>
 
 </beans>
