@@ -253,3 +253,67 @@ comment on column staff_view.updated_by is '更新者';
 comment on column staff_view.staff_no   is 'スタッフ番号';
 comment on column staff_view.name       is '氏名';
 comment on column staff_view.birthday   is '生年月日';
+
+CREATE TABLE TT_JOHO (
+CD_SEQ DECIMAL ,
+CD_BROWSE CHAR(5) ,
+CD_CATEGORY CHAR(5) ,
+TM_RELEASE timestamp ,
+KJ_TITLE VARCHAR(500) ,
+DT_OSHIRASE VARCHAR(5000) ,
+TM_LIMIT timestamp ,
+DT_FILE VARCHAR(500) ,
+CD_LU_USER CHAR(50) ,
+TM_LU timestamp ,
+CONSTRAINT TT_JOHO_PK PRIMARY KEY (CD_SEQ));
+
+COMMENT ON TABLE TT_JOHO is '情報提供管理';
+COMMENT on column TT_JOHO.CD_SEQ is '連番';
+COMMENT on column TT_JOHO.CD_BROWSE is '閲覧可能範囲';
+COMMENT on column TT_JOHO.CD_CATEGORY is 'カテゴリ';
+COMMENT on column TT_JOHO.TM_RELEASE is '公開日付';
+COMMENT on column TT_JOHO.KJ_TITLE is 'タイトル';
+COMMENT on column TT_JOHO.DT_OSHIRASE is 'お知らせメッセージ';
+COMMENT on column TT_JOHO.TM_LIMIT is '公開期限';
+COMMENT on column TT_JOHO.DT_FILE is '添付ファイル';
+COMMENT on column TT_JOHO.CD_LU_USER is '最終更新者ユーザID';
+COMMENT on column TT_JOHO.TM_LU is '最終更新日時';
+
+
+CREATE TABLE TM_CODE (	
+    CD_SHU CHAR(5), 
+	KJ_SHU VARCHAR(100), 
+	CD_CODE CHAR(5), 
+	KJ_CODE VARCHAR(100), 
+	DT_JORETSU1 INT,
+	DT_JORETSU2 INT,
+	DT_TEXT1 VARCHAR(200), 
+	DT_TEXT2 VARCHAR(200), 
+	NM_NUM1 DECIMAL(15,3), 
+	NM_NUM2 DECIMAL(15,3), 
+	TM_DATE1 timestamp, 
+	TM_DATE2 timestamp, 
+	CD_TEISHI CHAR(5), 
+	CD_LU_KAISHA CHAR(5), 
+	CD_LU_USER CHAR(50), 
+	TM_LU timestamp, 
+	CONSTRAINT TM_CODE_PK PRIMARY KEY (CD_SHU, CD_CODE));
+
+
+COMMENT on table TM_CODE is 'コード';
+COMMENT on column TM_CODE.CD_SHU is '種別コード';
+COMMENT on column TM_CODE.KJ_SHU is '種別名';
+COMMENT on column TM_CODE.CD_CODE is 'コード値';
+COMMENT on column TM_CODE.KJ_CODE is 'コード名';
+COMMENT on column TM_CODE.DT_JORETSU1 is '序列１';
+COMMENT on column TM_CODE.DT_JORETSU2 is '序列２';
+COMMENT on column TM_CODE.DT_TEXT1 is 'テキスト１';
+COMMENT on column TM_CODE.DT_TEXT2 is 'テキスト２';
+COMMENT on column TM_CODE.NM_NUM1 is '数値１';
+COMMENT on column TM_CODE.NM_NUM2 is '数値２';
+COMMENT on column TM_CODE.TM_DATE1 is '日付１';
+COMMENT on column TM_CODE.TM_DATE2 is '日付２';
+COMMENT on column TM_CODE.CD_TEISHI is '使用停止区分';
+COMMENT on column TM_CODE.CD_LU_KAISHA is '最終更新会社コード';
+COMMENT on column TM_CODE.CD_LU_USER is '最終更新者ユーザID';
+COMMENT on column TM_CODE.TM_LU is '最終更新日時';

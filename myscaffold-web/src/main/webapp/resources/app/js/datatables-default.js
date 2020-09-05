@@ -13,6 +13,9 @@ $.extend($.fn.dataTable.defaults, {
     // 遅延読込
     "deferRender": true,
 
+    // 処理中
+    'processing': true,
+
     // データ取得先のURLの初期値設定
     // flattenはSpringMVCでデータを受け取るためのクエリパラメータの変換処理
     'ajax': {
@@ -97,6 +100,9 @@ function fnRecoverFieldSearch(table) {
     });
 }
 
+/**
+ * 項目単位フィルタを追加する共通処理(列の並び順対応版)
+ */
 function addFieldFilter2(table) {
 
     // 項目単位フィルタのためのイベント処理を設定する。
