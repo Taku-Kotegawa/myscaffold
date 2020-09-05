@@ -107,4 +107,6 @@ public interface AccountSharedService {
      */
     long countByExample(AccountExample example);
 
+
+    void initdata(int num, int loop);
 }

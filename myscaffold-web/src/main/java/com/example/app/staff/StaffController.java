@@ -2,9 +2,12 @@ package com.example.app.staff;
 
 import com.example.domain.common.Constants;
 import com.example.domain.common.StateMap;
+import com.example.domain.common.StringUtils;
 import com.example.domain.common.message.MessageKeys;
+import com.example.domain.example.Person;
 import com.example.domain.example.Staff;
 import com.example.domain.example.StaffExample;
+import com.example.domain.mongorepository.PersonRepository;
 import com.example.domain.service.staff.StaffService;
 import com.example.domain.service.userdetails.LoggedInUser;
 import com.github.dozermapper.core.Mapper;
@@ -42,6 +45,9 @@ public class StaffController {
 
     @Autowired
     Mapper beanMapper;
+
+    @Autowired
+    PersonRepository personRepository;
 
     /*
      * ハンドラーメソッドの引数
@@ -185,6 +191,8 @@ public class StaffController {
     @GetMapping(value = "list")
     public String list(Model model, @AuthenticationPrincipal LoggedInUser loggedInUser) {
 
+        List<Person> persons = personRepository.findAll();
+
         // 実行権限が無い場合、AccessDeniedExceptionをスローし、キャッチしないと権限エラー画面に遷移
         staffService.hasAuthority(OPERATION.LIST, loggedInUser);
 
@@ -197,12 +205,27 @@ public class StaffController {
 
     // ---------------- 新規登録 -----------------------------------------------------
 
+    private String getDestination(String destination) {
+
+        if (!StringUtils.isEmpty(destination)) {
+            return "&distination=" + destination;
+        } else {
+            return "";
+        }
+    }
+
+    private String redirectGoto(String destination){
+        return "redirect:" + destination;
+    }
+
+
     /**
      * 新規作成画面を開く
      */
     @GetMapping(value = "create", params = "form")
     @TransactionTokenCheck(type = TransactionTokenType.BEGIN)
-    public String createForm(StaffForm form, Model model, @AuthenticationPrincipal LoggedInUser loggedInUser,
+    public String createForm(StaffForm form, Model model,
+                             @AuthenticationPrincipal LoggedInUser loggedInUser,
                              @RequestParam(name = "copy", required = false) String copy,
                              @RequestParam(name = "destination", required = false) String destination) {
 
@@ -229,7 +252,7 @@ public class StaffController {
         model.addAttribute("fieldState", filedState.asMap());
 
         // destination
-        model.addAttribute("destination", destination);
+        model.addAttribute("destination", getDestination(destination));
 
         return "staff/form";
     }

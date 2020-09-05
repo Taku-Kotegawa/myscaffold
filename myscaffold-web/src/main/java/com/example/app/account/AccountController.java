@@ -33,7 +33,7 @@ import java.io.IOException;
 import java.util.*;
 
 @Controller
-@RequestMapping("accounts")
+@RequestMapping("account")
 public final class AccountController {
 
     @Autowired
@@ -282,6 +282,14 @@ public final class AccountController {
     @RequestMapping(value = "/list/allkeyjson", method = RequestMethod.GET)
     public List<String> getAllKeyJson() {
         return accountExRepository.selectAllKey();
+    }
+
+    @GetMapping("initdata")
+    public String initData(Model model) {
+
+        accountSharedService.initdata(1000, 1000);
+        return "account/initdata";
+
     }
 
 }

@@ -69,7 +69,7 @@ class AccountRepositoryTest {
     /**
      * accountテーブルにデータを挿入する。 (Repository.insert使用)
      *
-     * @param accounts Account(カンマ区切りで複数姿勢z)
+     * @param accounts Account(カンマ区切りで複数指定可)
      */
     private void insertIntoDatabase(Account... accounts) {
         for (Account account : accounts) {

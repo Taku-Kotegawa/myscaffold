@@ -31,7 +31,7 @@ import org.terasoluna.gfw.common.date.ClassicDateFactory;
 import javax.inject.Inject;
 import java.util.List;
 
-@Service
+        @Service
 @Transactional
 public class AuthenticationEventSharedServiceImpl implements AuthenticationEventSharedService {
 

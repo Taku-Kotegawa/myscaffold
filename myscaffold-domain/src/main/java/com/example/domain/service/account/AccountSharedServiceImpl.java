@@ -246,4 +246,27 @@ public class AccountSharedServiceImpl implements AccountSharedService {
     public long countByExample(AccountExample example) {
         return accountRepository.countByExample(example);
     }
+
+    @Override
+    public void initdata(int num, int loop) {
+
+        for (int j = 1; j <= loop; j++) {
+            for (int i = 1; i <= num; i++) {
+                String counter = com.example.domain.common.StringUtils.leftPad(Integer.toString(j), 5, "0")
+                        + com.example.domain.common.StringUtils.leftPad(Integer.toString(i), 5, "0");
+                if (accountRepository.selectByPrimaryKey("user" + counter) == null) {
+                    Account account = new Account();
+                    account.setUsername("user" + counter);
+                    account.setPassword("password" + counter);
+                    account.setFirstName("firstname" + counter);
+                    account.setLastName("lastname" + counter);
+                    account.setEmail("email" + counter + "@stnet.co.jp");
+                    account.setUrl("url" + counter + ".stnet.co.jp");
+                    account.setProfile("profile" + counter);
+                    accountRepository.insert(account);
+                }
+            }
+        }
+
+    }
 }

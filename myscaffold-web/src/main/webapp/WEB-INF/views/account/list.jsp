@@ -18,16 +18,16 @@
     <t:messagesPanel panelClassName="callout" panelTypeClassPrefix="callout-" disableHtmlEscape="true" />
     <!-- ここより下にメインコンテンツを記入 -->
 
-    <!-- <div class="card">
+    <div class="card">
       <div class="card-body">
         <div class="row">
           <div class-="co4">
             <label>氏名</label>
-            <input type="text" id="col_filter_2" data-column="2" class="form-control dataTables_column_filter">
+            <input type="text" id="col_filter_3" data-column="3" class="dataTables_column_filter form-control">
           </div>
         </div>
       </div>
-    </div> -->
+    </div>
 
 
     <table id="acountlist" class="table-sm table-striped">
@@ -70,19 +70,21 @@
 
         // 項目単位フィルタ用のInputフィールドを追加する。
         var startcolnum = 2;
-        $('tr.filter th').each(function () {
-          var idx = $(this).index();
-          if (startcolnum <= idx) {
-            $(this).html('<input type="text" id="col_filter_' + idx + '" _data-column="' + idx +
-              '" class="dataTables_column_filter form-control" />');
-          }
-        });
+//        $('tr.filter th').each(function () {
+//          var idx = $(this).index();
+//          if (startcolnum <= idx) {
+//            $(this).html('<input type="text" id="col_filter_' + idx + '" data-column="' + idx +
+//              '" class="dataTables_column_filter form-control" />');
+//          }
+//        });
 
         var table = $('#acountlist').DataTable({
 
 //           'serverSide': false,
 //           'ajax': 'list/json2',
 //            "deferRender": false,
+
+          'processing': true,
 
           // 一覧に表示する項目とJSONの項目にマッピング
           'columns': [
@@ -125,7 +127,8 @@
         });
 
         // 項目単位フィルタの追加
-        addFieldFilter2(table)
+        addFieldFilter(table)
+        //addFieldFilter2(table)
 
       });
 
