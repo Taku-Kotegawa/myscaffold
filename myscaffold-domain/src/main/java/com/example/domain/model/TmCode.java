@@ -1,5 +1,6 @@
 package com.example.domain.model;
 
+import com.example.domain.common.SetUpdateInterface;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -13,7 +14,7 @@ import lombok.Data;
  * This class corresponds to the database table tm_code
  */
 @Data
-public class TmCode implements Serializable {
+public class TmCode implements SetUpdateInterface, Serializable {
     /**
      * Database Column Remarks:
      *   種別コード
