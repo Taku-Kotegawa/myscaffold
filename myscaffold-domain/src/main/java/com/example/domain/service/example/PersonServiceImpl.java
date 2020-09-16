@@ -1,10 +1,10 @@
 package com.example.domain.service.example;
 
 import com.example.domain.example.Person;
-import com.example.domain.mongorepository.PersonRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,22 +15,20 @@ import java.util.List;
 @Transactional
 public class PersonServiceImpl implements PersonService {
 
-    @Autowired
-    PersonRepository repository;
 
     @Override
     public Person insert(Person person) {
-        return repository.insert(person);
+        return null;
     }
 
     @Override
     public Person save(Person person) {
-        return repository.save(person);
+        return null;
     }
 
     @Override
     public void delete(Person person) {
-        repository.delete(person);
+
     }
 
     @Override
@@ -40,7 +38,7 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public boolean exists(String id) {
-        return repository.existsById(id);
+        return false;
     }
 
     @Override

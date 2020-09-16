@@ -4,10 +4,8 @@ import com.example.domain.common.Constants;
 import com.example.domain.common.StateMap;
 import com.example.domain.common.StringUtils;
 import com.example.domain.common.message.MessageKeys;
-import com.example.domain.example.Person;
 import com.example.domain.example.Staff;
 import com.example.domain.example.StaffExample;
-import com.example.domain.mongorepository.PersonRepository;
 import com.example.domain.service.staff.StaffService;
 import com.example.domain.service.userdetails.LoggedInUser;
 import com.github.dozermapper.core.Mapper;
@@ -46,8 +44,6 @@ public class StaffController {
     @Autowired
     Mapper beanMapper;
 
-    @Autowired
-    PersonRepository personRepository;
 
     /*
      * ハンドラーメソッドの引数
@@ -191,8 +187,6 @@ public class StaffController {
     @GetMapping(value = "list")
     public String list(Model model, @AuthenticationPrincipal LoggedInUser loggedInUser) {
 
-        List<Person> persons = personRepository.findAll();
-
         // 実行権限が無い場合、AccessDeniedExceptionをスローし、キャッチしないと権限エラー画面に遷移
         staffService.hasAuthority(OPERATION.LIST, loggedInUser);
 
@@ -214,7 +208,7 @@ public class StaffController {
         }
     }
 
-    private String redirectGoto(String destination){
+    private String redirectGoto(String destination) {
         return "redirect:" + destination;
     }
 

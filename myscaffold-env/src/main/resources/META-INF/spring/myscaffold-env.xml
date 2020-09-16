@@ -2,12 +2,9 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:cache="http://www.springframework.org/schema/cache"
-       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
        xsi:schemaLocation="
         http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/data/mongo
-        https://www.springframework.org/schema/data/mongo/spring-mongo-2.2.xsd
         http://www.springframework.org/schema/cache
         http://www.springframework.org/schema/cache/spring-cache.xsd">
 
@@ -75,14 +72,14 @@
 
     <!--    <bean id="greenMailBean" class="com.icegreen.greenmail.spring.GreenMailBean" />-->
 
-    <mongo:mongo-client host="${mongo.host}" port="${mongo.port}">
-        <mongo:client-options />
-    </mongo:mongo-client>
-    <mongo:db-factory dbname="testdb" mongo-ref="mongoClient"/>
-    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
-        <constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>
-    </bean>
-    <mongo:repositories
-            base-package="com.example.domain.mongorepository" mongo-template-ref="mongoTemplate"/>
+<!--    <mongo:mongo-client host="${mongo.host}" port="${mongo.port}">-->
+<!--        <mongo:client-options />-->
+<!--    </mongo:mongo-client>-->
+<!--    <mongo:db-factory dbname="testdb" mongo-ref="mongoClient"/>-->
+<!--    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">-->
+<!--        <constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>-->
+<!--    </bean>-->
+<!--    <mongo:repositories-->
+<!--            base-package="com.example.domain.mongorepository" mongo-template-ref="mongoTemplate"/>-->
 
 </beans>
